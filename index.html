@@ -3,91 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Invoice Generator Pro | Buat Faktur Profesional</title>
-  <meta name="description" content="Buat invoice profesional dengan mudah. Tambahkan item, pajak, diskon, dan export ke PDF secara gratis." />
+  <title>DocPro | Invoice · Proposal · Penawaran · SPK</title>
+  <meta name="description" content="Buat Invoice, Proposal, Surat Penawaran, dan SPK profesional. Export PDF, cetak langsung dari browser." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
+
+  <!-- ═══ HEADER ═══ -->
   <header class="app-header">
     <div class="header-inner">
       <div class="header-brand">
         <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <polyline points="10,9 9,9 8,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
           </svg>
         </div>
-        <span class="brand-name">InvoicePro</span>
+        <span class="brand-name">DocPro</span>
       </div>
       <div class="header-actions">
-        <button class="btn btn-ghost" id="btn-reset" title="Reset Form">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="1 4 1 10 7 10"></polyline>
-            <path d="M3.51 15a9 9 0 1 0 .49-3.05"></path>
-          </svg>
+        <button class="btn btn-ghost" id="btn-reset">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.05"/></svg>
           Reset
         </button>
-        <button class="btn btn-outline" id="btn-print" title="Cetak Invoice">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
-          </svg>
+        <button class="btn btn-outline" id="btn-print">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           Cetak
         </button>
-        <button class="btn btn-primary" id="btn-pdf" title="Download PDF">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
+        <button class="btn btn-primary" id="btn-pdf">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download PDF
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Layout -->
+  <!-- ═══ MAIN ═══ -->
   <main class="app-main">
-    <!-- Left: Form Panel -->
-    <section class="form-panel" aria-label="Form Invoice">
+
+    <!-- ─── FORM PANEL ─── -->
+    <section class="form-panel" aria-label="Form Dokumen">
       <div class="form-panel-inner">
 
-        <!-- Section: Pengirim -->
-        <div class="form-section">
+        <!-- DOC TYPE SWITCHER -->
+        <div class="doc-type-switcher">
+          <button class="doc-type-btn active" data-type="invoice" id="tab-invoice">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Invoice
+          </button>
+          <button class="doc-type-btn" data-type="proposal" id="tab-proposal">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Proposal
+          </button>
+          <button class="doc-type-btn" data-type="penawaran" id="tab-penawaran">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Penawaran
+          </button>
+          <button class="doc-type-btn" data-type="spk" id="tab-spk">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+            SPK
+          </button>
+        </div>
+
+        <!-- ══ PENGIRIM / PIHAK PERTAMA ══ -->
+        <div class="form-section" data-types="all" id="section-sender">
           <div class="section-header">
             <div class="section-icon sender-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-            <h2 class="section-title">Informasi Pengirim</h2>
+            <h2 class="section-title" id="sender-section-title">Informasi Pengirim</h2>
           </div>
           <div class="logo-upload-area" id="logo-upload-area">
             <input type="file" id="logo-input" accept="image/*" hidden />
             <div class="logo-placeholder" id="logo-placeholder">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span>Upload Logo</span>
               <small>PNG, JPG, SVG</small>
             </div>
-            <img id="logo-preview" src="" alt="Logo Perusahaan" hidden />
-            <button class="logo-remove-btn" id="logo-remove-btn" hidden title="Hapus logo">×</button>
+            <img id="logo-preview" src="" alt="Logo" hidden />
+            <button class="logo-remove-btn" id="logo-remove-btn" hidden>×</button>
           </div>
           <div class="form-grid">
             <div class="form-group full-width">
-              <label for="sender-name">Nama Perusahaan / Pengirim</label>
+              <label for="sender-name" id="lbl-sender-name">Nama Perusahaan / Pengirim</label>
               <input type="text" id="sender-name" placeholder="PT. Maju Bersama Indonesia" />
             </div>
             <div class="form-group full-width">
@@ -105,20 +109,17 @@
           </div>
         </div>
 
-        <!-- Section: Penerima -->
-        <div class="form-section">
+        <!-- ══ KLIEN / PIHAK KEDUA ══ -->
+        <div class="form-section" data-types="all" id="section-client">
           <div class="section-header">
             <div class="section-icon client-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
-            <h2 class="section-title">Informasi Klien</h2>
+            <h2 class="section-title" id="client-section-title">Informasi Klien</h2>
           </div>
           <div class="form-grid">
             <div class="form-group full-width">
-              <label for="client-name">Nama Klien / Penerima</label>
+              <label for="client-name" id="lbl-client-name">Nama Klien / Penerima</label>
               <input type="text" id="client-name" placeholder="CV. Sejahtera Abadi" />
             </div>
             <div class="form-group full-width">
@@ -126,36 +127,34 @@
               <textarea id="client-address" rows="2" placeholder="Jl. Gatot Subroto No. 45, Bandung 40151"></textarea>
             </div>
             <div class="form-group">
-              <label for="client-phone">Telepon Klien</label>
+              <label for="client-phone">Telepon</label>
               <input type="text" id="client-phone" placeholder="+62 22 9876 5432" />
             </div>
             <div class="form-group">
-              <label for="client-email">Email Klien</label>
+              <label for="client-email">Email</label>
               <input type="email" id="client-email" placeholder="klien@email.com" />
             </div>
           </div>
         </div>
 
-        <!-- Section: Detail Invoice -->
-        <div class="form-section">
+        <!-- ══ DETAIL DOKUMEN ══ -->
+        <div class="form-section" data-types="all" id="section-doc-details">
           <div class="section-header">
             <div class="section-icon invoice-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
-            <h2 class="section-title">Detail Invoice</h2>
+            <h2 class="section-title" id="doc-detail-title">Detail Invoice</h2>
           </div>
           <div class="form-grid">
             <div class="form-group">
-              <label for="invoice-number">Nomor Invoice</label>
+              <label for="invoice-number" id="lbl-doc-number">Nomor Invoice</label>
               <div class="input-with-badge">
-                <input type="text" id="invoice-number" placeholder="INV-2024-001" />
+                <input type="text" id="invoice-number" placeholder="INV-20240101-001" />
                 <button class="generate-btn" id="btn-generate-inv" title="Generate nomor baru">⟳</button>
               </div>
             </div>
-            <div class="form-group">
+            <!-- Currency: invoice, penawaran, proposal -->
+            <div class="form-group" data-show-for="invoice penawaran proposal" id="field-currency">
               <label for="currency">Mata Uang</label>
               <select id="currency">
                 <option value="IDR">IDR – Rupiah</option>
@@ -165,30 +164,114 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="invoice-date">Tanggal Invoice</label>
+              <label for="invoice-date" id="lbl-doc-date">Tanggal Dokumen</label>
               <input type="date" id="invoice-date" />
             </div>
-            <div class="form-group">
+            <!-- Due date: invoice only -->
+            <div class="form-group" data-show-for="invoice" id="field-due-date">
               <label for="due-date">Tanggal Jatuh Tempo</label>
               <input type="date" id="due-date" />
+            </div>
+            <!-- Berlaku hingga: penawaran only -->
+            <div class="form-group" data-show-for="penawaran" id="field-valid-until">
+              <label for="valid-until">Berlaku Hingga</label>
+              <input type="date" id="valid-until" />
+            </div>
+            <!-- Lokasi: SPK only -->
+            <div class="form-group full-width" data-show-for="spk" id="field-lokasi">
+              <label for="spk-lokasi">Lokasi Pekerjaan</label>
+              <input type="text" id="spk-lokasi" placeholder="Jakarta Selatan" />
             </div>
           </div>
         </div>
 
-        <!-- Section: Item -->
-        <div class="form-section">
+        <!-- ══ PENAWARAN: Perihal & Ketentuan ══ -->
+        <div class="form-section" data-types="penawaran" id="section-penawaran" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#FEF3C7;color:#D97706;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h2 class="section-title">Perihal & Ketentuan</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="penawaran-perihal">Perihal / Subyek</label>
+              <input type="text" id="penawaran-perihal" placeholder="Penawaran Jasa Desain Website" />
+            </div>
+            <div class="form-group full-width">
+              <label for="penawaran-terms">Syarat & Ketentuan</label>
+              <textarea id="penawaran-terms" rows="4" placeholder="1. Pembayaran dilakukan 50% di muka dan 50% setelah pekerjaan selesai.&#10;2. Penawaran berlaku sesuai tanggal yang tertera.&#10;3. Harga belum termasuk pajak kecuali dinyatakan lain."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ PROPOSAL: Intro ══ -->
+        <div class="form-section" data-types="proposal" id="section-proposal-intro" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#F3E8FF;color:#7C3AED;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h2 class="section-title">Informasi Proposal</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="proposal-perihal">Perihal / Judul Proposal</label>
+              <input type="text" id="proposal-perihal" placeholder="Proposal Pengembangan Aplikasi Mobile" />
+            </div>
+            <div class="form-group full-width">
+              <label for="proposal-latar">Latar Belakang</label>
+              <textarea id="proposal-latar" rows="3" placeholder="Dengan semakin berkembangnya kebutuhan digital, kami mengajukan proposal ini untuk..."></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label for="proposal-tujuan">Tujuan & Sasaran</label>
+              <textarea id="proposal-tujuan" rows="3" placeholder="1. Meningkatkan efisiensi operasional&#10;2. Memperluas jangkauan pasar&#10;3. Meningkatkan kepuasan pelanggan"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ PROPOSAL: Ruang Lingkup ══ -->
+        <div class="form-section" data-types="proposal" id="section-proposal-scope" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#ECFDF5;color:#059669;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <h2 class="section-title">Ruang Lingkup Pekerjaan</h2>
+          </div>
+          <div id="scope-list"><!-- JS rendered --></div>
+          <button class="btn-add-item" id="btn-add-scope">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Poin Lingkup
+          </button>
+        </div>
+
+        <!-- ══ PROPOSAL: Timeline ══ -->
+        <div class="form-section" data-types="proposal" id="section-proposal-timeline" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#FFF7ED;color:#EA580C;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h2 class="section-title">Timeline / Jadwal</h2>
+          </div>
+          <div class="timeline-header-row">
+            <span>Tahap</span>
+            <span>Deskripsi Kegiatan</span>
+            <span>Durasi</span>
+            <span></span>
+          </div>
+          <div id="timeline-list"><!-- JS rendered --></div>
+          <button class="btn-add-item" id="btn-add-timeline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Tahap
+          </button>
+        </div>
+
+        <!-- ══ ITEMS: Invoice, Penawaran, Proposal (Anggaran) ══ -->
+        <div class="form-section" data-types="invoice penawaran proposal" id="section-items">
           <div class="section-header">
             <div class="section-icon items-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             </div>
-            <h2 class="section-title">Daftar Item</h2>
+            <h2 class="section-title" id="items-section-title">Daftar Item</h2>
           </div>
           <div class="items-header-row">
             <span class="col-desc">Deskripsi</span>
@@ -197,26 +280,18 @@
             <span class="col-sub">Subtotal</span>
             <span class="col-action"></span>
           </div>
-          <div id="items-list">
-            <!-- Items rendered by JS -->
-          </div>
+          <div id="items-list"><!-- JS rendered --></div>
           <button class="btn-add-item" id="btn-add-item">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah Item
           </button>
         </div>
 
-        <!-- Section: Pajak, Diskon, Catatan -->
-        <div class="form-section">
+        <!-- ══ FINANCIALS: Invoice, Penawaran, Proposal ══ -->
+        <div class="form-section" data-types="invoice penawaran proposal" id="section-financials">
           <div class="section-header">
             <div class="section-icon summary-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="1" x2="12" y2="23"></line>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </div>
             <h2 class="section-title">Pajak, Diskon & Catatan</h2>
           </div>
@@ -235,7 +310,8 @@
                 <span class="suffix">%</span>
               </div>
             </div>
-            <div class="form-group full-width">
+            <!-- Payment: invoice, penawaran only -->
+            <div class="form-group full-width" data-show-for="invoice penawaran" id="field-payment-method">
               <label for="payment-method">Metode Pembayaran</label>
               <select id="payment-method">
                 <option value="">-- Pilih Metode --</option>
@@ -248,165 +324,128 @@
                 <option value="Dana">Dana</option>
               </select>
             </div>
-            <div class="form-group full-width" id="bank-details-group" style="display:none;">
+            <div class="form-group full-width" data-show-for="invoice penawaran" id="field-bank-details" style="display:none;">
               <label for="bank-details">Detail Rekening Bank</label>
               <textarea id="bank-details" rows="2" placeholder="Bank BCA – 1234567890 – PT. Maju Bersama Indonesia"></textarea>
             </div>
             <div class="form-group full-width">
               <label for="notes">Catatan Tambahan</label>
-              <textarea id="notes" rows="3" placeholder="Terima kasih atas kepercayaan Anda. Pembayaran harap dilakukan sebelum tanggal jatuh tempo."></textarea>
+              <textarea id="notes" rows="3" placeholder="Terima kasih atas kepercayaan Anda..."></textarea>
             </div>
           </div>
         </div>
 
-      </div>
+        <!-- ══ PROPOSAL: Penutup ══ -->
+        <div class="form-section" data-types="proposal" id="section-proposal-closing" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#EEF1FD;color:#4F6BED;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h2 class="section-title">Kata Penutup</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="proposal-closing">Paragraf Penutup</label>
+              <textarea id="proposal-closing" rows="4" placeholder="Demikian proposal ini kami sampaikan. Besar harapan kami agar proposal ini dapat diterima dan ditindaklanjuti. Atas perhatian dan kerjasamanya, kami ucapkan terima kasih."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ SPK: Detail Pekerjaan ══ -->
+        <div class="form-section" data-types="spk" id="section-spk-details" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#FEF2F2;color:#DC2626;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+            </div>
+            <h2 class="section-title">Detail Pekerjaan</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="spk-nama">Nama / Judul Pekerjaan</label>
+              <input type="text" id="spk-nama" placeholder="Pembangunan Aplikasi Web E-Commerce" />
+            </div>
+            <div class="form-group">
+              <label for="spk-mulai">Tanggal Mulai</label>
+              <input type="date" id="spk-mulai" />
+            </div>
+            <div class="form-group">
+              <label for="spk-selesai">Tanggal Selesai</label>
+              <input type="date" id="spk-selesai" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ SPK: Lingkup Pekerjaan ══ -->
+        <div class="form-section" data-types="spk" id="section-spk-scope" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#ECFDF5;color:#059669;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <h2 class="section-title">Lingkup Pekerjaan</h2>
+          </div>
+          <div id="spk-scope-list"><!-- JS rendered --></div>
+          <button class="btn-add-item" id="btn-add-spk-scope">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Poin Pekerjaan
+          </button>
+        </div>
+
+        <!-- ══ SPK: Nilai & Ketentuan ══ -->
+        <div class="form-section" data-types="spk" id="section-spk-value" style="display:none;">
+          <div class="section-header">
+            <div class="section-icon" style="background:#FFF7ED;color:#EA580C;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h2 class="section-title">Nilai Kontrak & Ketentuan</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="spk-nilai">Nilai Kontrak (Rp)</label>
+              <input type="number" id="spk-nilai" placeholder="50000000" min="0" />
+            </div>
+            <div class="form-group full-width">
+              <label for="spk-cara-bayar">Cara Pembayaran / Termin</label>
+              <textarea id="spk-cara-bayar" rows="3" placeholder="1. Uang muka 30% setelah SPK ditandatangani&#10;2. Termin kedua 40% setelah pengerjaan 50%&#10;3. Pelunasan 30% setelah serah terima"></textarea>
+            </div>
+            <div class="form-group full-width">
+              <label for="spk-syarat">Syarat & Ketentuan Umum</label>
+              <textarea id="spk-syarat" rows="5" placeholder="Pasal 1 – Pihak Pertama menunjuk Pihak Kedua untuk melaksanakan pekerjaan sebagaimana tersebut di atas.&#10;Pasal 2 – Pihak Kedua wajib menyelesaikan pekerjaan tepat waktu sesuai jadwal yang disepakati.&#10;Pasal 3 – Seluruh biaya yang timbul akibat pelaksanaan pekerjaan menjadi tanggung jawab Pihak Kedua."></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /form-panel-inner -->
     </section>
 
-    <!-- Right: Preview Panel -->
-    <section class="preview-panel" aria-label="Preview Invoice">
+    <!-- ─── PREVIEW PANEL ─── -->
+    <section class="preview-panel" aria-label="Preview Dokumen">
       <div class="preview-panel-sticky">
         <div class="preview-toolbar">
           <span class="preview-label">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Preview Real-time
           </span>
           <div class="preview-toolbar-actions">
-            <button class="btn btn-sm btn-outline" id="btn-print-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-              </svg>
+            <button class="btn btn-sm btn-outline" id="btn-print-sm" title="Cetak">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             </button>
-            <button class="btn btn-sm btn-primary" id="btn-pdf-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
+            <button class="btn btn-sm btn-primary" id="btn-pdf-sm" title="Download PDF">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               PDF
             </button>
           </div>
         </div>
         <div class="preview-wrapper">
-          <!-- Invoice Preview Document -->
           <div id="invoice-preview" class="invoice-doc">
-            <!-- Header -->
-            <div class="inv-header">
-              <div class="inv-header-left">
-                <div class="inv-logo-wrap" id="prev-logo-wrap">
-                  <img id="prev-logo" src="" alt="Logo" hidden />
-                </div>
-                <div class="inv-sender">
-                  <div class="inv-sender-name" id="prev-sender-name">Nama Perusahaan</div>
-                  <div class="inv-sender-detail" id="prev-sender-address"></div>
-                  <div class="inv-sender-detail" id="prev-sender-phone"></div>
-                  <div class="inv-sender-detail" id="prev-sender-email"></div>
-                </div>
-              </div>
-              <div class="inv-header-right">
-                <div class="inv-title">INVOICE</div>
-                <div class="inv-number" id="prev-invoice-number">#INV-2024-001</div>
-              </div>
-            </div>
-
-            <div class="inv-divider"></div>
-
-            <!-- Meta Info -->
-            <div class="inv-meta">
-              <div class="inv-meta-block">
-                <div class="inv-meta-label">Ditagihkan Kepada</div>
-                <div class="inv-client-name" id="prev-client-name">Nama Klien</div>
-                <div class="inv-client-detail" id="prev-client-address"></div>
-                <div class="inv-client-detail" id="prev-client-phone"></div>
-                <div class="inv-client-detail" id="prev-client-email"></div>
-              </div>
-              <div class="inv-meta-block inv-dates">
-                <div class="inv-date-row">
-                  <span class="inv-date-label">Tanggal Invoice</span>
-                  <span class="inv-date-value" id="prev-invoice-date">–</span>
-                </div>
-                <div class="inv-date-row">
-                  <span class="inv-date-label">Jatuh Tempo</span>
-                  <span class="inv-date-value due-highlight" id="prev-due-date">–</span>
-                </div>
-                <div class="inv-date-row">
-                  <span class="inv-date-label">Mata Uang</span>
-                  <span class="inv-date-value" id="prev-currency">IDR</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Items Table -->
-            <table class="inv-table" id="prev-items-table">
-              <thead>
-                <tr>
-                  <th class="th-no">#</th>
-                  <th class="th-desc">Deskripsi</th>
-                  <th class="th-qty">Qty</th>
-                  <th class="th-price">Harga Satuan</th>
-                  <th class="th-sub">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody id="prev-items-body">
-                <!-- Rows filled by JS -->
-              </tbody>
-            </table>
-
-            <!-- Summary -->
-            <div class="inv-summary-wrap">
-              <div class="inv-summary">
-                <div class="inv-sum-row">
-                  <span>Subtotal</span>
-                  <span id="prev-subtotal">Rp 0</span>
-                </div>
-                <div class="inv-sum-row discount-row" id="prev-discount-row" style="display:none;">
-                  <span id="prev-discount-label">Diskon (0%)</span>
-                  <span id="prev-discount-val">– Rp 0</span>
-                </div>
-                <div class="inv-sum-row tax-row" id="prev-tax-row" style="display:none;">
-                  <span id="prev-tax-label">PPN (0%)</span>
-                  <span id="prev-tax-val">Rp 0</span>
-                </div>
-                <div class="inv-sum-divider"></div>
-                <div class="inv-sum-row total-row">
-                  <span>TOTAL</span>
-                  <span id="prev-total">Rp 0</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Payment & Notes -->
-            <div class="inv-footer-section" id="prev-payment-section" style="display:none;">
-              <div class="inv-footer-label">Metode Pembayaran</div>
-              <div class="inv-footer-value" id="prev-payment-method"></div>
-              <div class="inv-footer-bank" id="prev-bank-details"></div>
-            </div>
-
-            <div class="inv-footer-section" id="prev-notes-section" style="display:none;">
-              <div class="inv-footer-label">Catatan</div>
-              <div class="inv-footer-value notes-text" id="prev-notes"></div>
-            </div>
-
-            <div class="inv-stamp-area">
-              <div class="inv-stamp-box">
-                <div class="inv-stamp-label">Tanda Tangan</div>
-              </div>
-              <div class="inv-thank-you">Terima kasih atas kepercayaan Anda!</div>
-            </div>
+            <!-- JS-rendered dynamically -->
           </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <!-- Toast Notification -->
+  </main><!-- /app-main -->
+
   <div class="toast" id="toast"></div>
-
-  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="app.js"></script>
 </body>
