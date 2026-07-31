@@ -63,6 +63,45 @@
     </div>
   </div>
 
+  <!-- ═══ HISTORY & DRAFT MODAL ═══ -->
+  <div id="history-modal" class="history-modal-overlay">
+    <div class="history-modal-card">
+      <div class="history-modal-header">
+        <div class="history-title-group">
+          <div class="history-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Riwayat &amp; Draft Dokumen</h3>
+            <span class="history-subtitle">Tersimpan otomatis saat export PDF &amp; simpan draft</span>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-history" title="Tutup">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="history-controls">
+        <div class="history-search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="history-search-input" placeholder="Cari nomor invoice, nama klien, pengirim..." />
+        </div>
+        <div class="history-filter-pills" id="history-filter-pills">
+          <button class="history-pill active" data-filter="all">Semua</button>
+          <button class="history-pill" data-filter="draft">Draft</button>
+          <button class="history-pill" data-filter="lunas">Lunas</button>
+          <button class="history-pill" data-filter="unpaid">Belum Lunas</button>
+        </div>
+      </div>
+
+      <div class="history-list-container" id="history-list-container">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ HEADER ═══ -->
   <header class="app-header">
     <div class="header-inner">
@@ -87,6 +126,14 @@
         <button class="btn btn-outline" id="btn-pwa-install" style="display:none;" title="Install Aplikasi HP">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Install App
+        </button>
+        <button class="btn btn-outline" id="btn-history" title="Buka Riwayat &amp; Draft Dokumen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Riwayat (<span id="history-count-badge">0</span>)
+        </button>
+        <button class="btn btn-outline" id="btn-save-draft" title="Simpan sebagai Draft">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan Draft
         </button>
         <button class="btn btn-ghost" id="btn-reset">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.05"/></svg>

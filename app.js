@@ -1052,7 +1052,10 @@ function exportPDF() {
     jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
     pagebreak: { mode:['avoid-all', 'css', 'legacy'] },
   }).from(el).save()
-    .then(()  => showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success'))
+    .then(()  => {
+      showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success');
+      saveCurrentDocument('pdf_export');
+    })
     .catch(() => showToast('Gagal membuat PDF', 'error'));
 }
 
@@ -1248,9 +1251,302 @@ function initMobileAndPWA() {
   }
 }
 
-// Auto init auth & mobile PWA on load
+/* ═══════════════════════════════════════════════
+   HISTORY & DRAFT BACKUP SYSTEM
+═══════════════════════════════════════════════ */
+const HISTORY_STORAGE_KEY = 'anshel_document_history';
+let activeHistoryFilter = 'all';
+
+function getHistoryList() {
+  try {
+    const json = localStorage.getItem(HISTORY_STORAGE_KEY);
+    return json ? JSON.parse(json) : [];
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveHistoryList(list) {
+  try {
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(list));
+    updateHistoryCountBadge();
+  } catch(e) {}
+}
+
+function updateHistoryCountBadge() {
+  const list = getHistoryList();
+  const badge = document.getElementById('history-count-badge');
+  if (badge) badge.textContent = list.length;
+}
+
+function captureFormData() {
+  const inputIds = [
+    'sender-name','sender-address','sender-phone','sender-email','sender-website','sender-npwp',
+    'client-name','client-address','client-phone','client-email','client-npwp',
+    'invoice-number','invoice-date','due-date','tax-rate','discount','notes',
+    'valid-until','spk-lokasi','penawaran-perihal','penawaran-terms',
+    'proposal-perihal','proposal-latar','proposal-tujuan','proposal-closing',
+    'signatory-name','signatory-title','signatory-name-proposal','signatory-title-proposal',
+    'spk-nama','spk-nilai','spk-cara-bayar','spk-syarat','spk-signatory-name','spk-signatory-title',
+    'spk-mulai','spk-selesai'
+  ];
+
+  const inputs = {};
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) inputs[id] = el.value;
+  });
+
+  return {
+    inputs,
+    items: JSON.parse(JSON.stringify(items)),
+    bankAccounts: JSON.parse(JSON.stringify(bankAccounts)),
+    scopeItems: JSON.parse(JSON.stringify(scopeItems)),
+    spkScopeItems: JSON.parse(JSON.stringify(spkScopeItems)),
+    timelineItems: JSON.parse(JSON.stringify(timelineItems)),
+    docStatus,
+    dpEnabled,
+    dpPercent: parseMoney(val('dp-percent')),
+    logoDataUrl
+  };
+}
+
+function saveCurrentDocument(saveType = 'manual_draft') {
+  const calc = calculate();
+  const formData = captureFormData();
+  const docNumber = val('invoice-number') || `${DOC_PREFIXES[currentDocType]}-001`;
+  const clientName = val('client-name') || 'Tanpa Klien';
+  const senderName = val('sender-name') || 'Anshel Document';
+  const totalAmt = calc.total || 0;
+  const statusLabel = docStatus || (saveType === 'manual_draft' ? 'draft' : '');
+
+  const history = getHistoryList();
+  
+  // Check if document with same number already exists -> update it!
+  const existingIdx = history.findIndex(h => h.docNumber === docNumber && h.docType === currentDocType);
+
+  const docRecord = {
+    id: existingIdx >= 0 ? history[existingIdx].id : uid(),
+    docType: currentDocType,
+    docNumber,
+    docStatus: statusLabel,
+    clientName,
+    senderName,
+    totalAmt,
+    savedAt: Date.now(),
+    saveType,
+    formData
+  };
+
+  if (existingIdx >= 0) {
+    history[existingIdx] = docRecord;
+  } else {
+    history.unshift(docRecord);
+  }
+
+  saveHistoryList(history);
+
+  if (saveType === 'manual_draft') {
+    showToast(`Draft ${docNumber} berhasil disimpan! 💾`, 'success');
+  } else if (saveType === 'pdf_export') {
+    showToast(`Tersimpan otomatis ke Riwayat & Draft! 📂`, 'info', 2000);
+  }
+}
+
+function loadDocumentFromHistory(id) {
+  const history = getHistoryList();
+  const rec = history.find(h => h.id === id);
+  if (!rec || !rec.formData) {
+    showToast('Data dokumen tidak ditemukan', 'error');
+    return;
+  }
+
+  const fd = rec.formData;
+
+  // Switch doc type tab
+  if (rec.docType && rec.docType !== currentDocType) {
+    switchDocType(rec.docType);
+  }
+
+  // Restore inputs
+  if (fd.inputs) {
+    Object.entries(fd.inputs).forEach(([k, v]) => {
+      const el = document.getElementById(k);
+      if (el) el.value = v;
+    });
+  }
+
+  // Restore lists
+  if (fd.items) items = JSON.parse(JSON.stringify(fd.items));
+  if (fd.bankAccounts) bankAccounts = JSON.parse(JSON.stringify(fd.bankAccounts));
+  if (fd.scopeItems) scopeItems = JSON.parse(JSON.stringify(fd.scopeItems));
+  if (fd.spkScopeItems) spkScopeItems = JSON.parse(JSON.stringify(fd.spkScopeItems));
+  if (fd.timelineItems) timelineItems = JSON.parse(JSON.stringify(fd.timelineItems));
+
+  // Restore DP & Status
+  docStatus = fd.docStatus || rec.docStatus || '';
+  dpEnabled = !!fd.dpEnabled;
+
+  const dpToggle = document.getElementById('enable-dp');
+  if (dpToggle) dpToggle.checked = dpEnabled;
+  const dpSection = document.getElementById('dp-section-fields');
+  if (dpSection) dpSection.style.display = dpEnabled ? '' : 'none';
+  if (fd.dpPercent) {
+    const dpPercentEl = document.getElementById('dp-percent');
+    if (dpPercentEl) dpPercentEl.value = fd.dpPercent;
+  }
+
+  // Restore status buttons
+  document.querySelectorAll('#status-selector .status-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.status === docStatus);
+  });
+
+  // Restore logo
+  if (fd.logoDataUrl) {
+    logoDataUrl = fd.logoDataUrl;
+  }
+
+  renderAllLists();
+  renderPreview();
+
+  // Close modal
+  closeHistoryModal();
+  showToast(`Dokumen ${rec.docNumber} berhasil dimuat! ✏️`, 'success');
+}
+
+function deleteHistoryRecord(id, e) {
+  if (e) e.stopPropagation();
+  if (!confirm('Hapus dokumen ini dari riwayat?')) return;
+
+  let history = getHistoryList();
+  history = history.filter(h => h.id !== id);
+  saveHistoryList(history);
+  renderHistoryList();
+  showToast('Dokumen dihapus dari riwayat', 'info');
+}
+
+function openHistoryModal() {
+  const modal = document.getElementById('history-modal');
+  if (modal) {
+    renderHistoryList();
+    modal.classList.add('show');
+  }
+}
+
+function closeHistoryModal() {
+  const modal = document.getElementById('history-modal');
+  if (modal) modal.classList.remove('show');
+}
+
+function renderHistoryList() {
+  const container = document.getElementById('history-list-container');
+  if (!container) return;
+
+  const searchVal = (document.getElementById('history-search-input')?.value || '').toLowerCase().trim();
+  let history = getHistoryList();
+
+  // Filter by category
+  if (activeHistoryFilter !== 'all') {
+    history = history.filter(h => (h.docStatus || '').toLowerCase() === activeHistoryFilter);
+  }
+
+  // Filter by search text
+  if (searchVal) {
+    history = history.filter(h =>
+      (h.docNumber || '').toLowerCase().includes(searchVal) ||
+      (h.clientName || '').toLowerCase().includes(searchVal) ||
+      (h.senderName || '').toLowerCase().includes(searchVal) ||
+      (DOC_LABELS[h.docType] || '').toLowerCase().includes(searchVal)
+    );
+  }
+
+  if (!history.length) {
+    container.innerHTML = `<div class="history-empty-state">
+      📂 Belum ada dokumen tersimpan.<br>
+      <small style="color:#94A3B8;margin-top:6px;display:block;">Dokumen akan tersimpan otomatis saat Anda klik "Download PDF" atau "Simpan Draft".</small>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+  history.forEach(rec => {
+    const dt = new Date(rec.savedAt || Date.now());
+    const dateFormatted = `${dt.getDate()}/${dt.getMonth()+1}/${dt.getFullYear()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+    
+    let statusBadge = '<span class="history-doc-type-badge" style="background:#F1F5F9;color:#64748B;">DRAFT</span>';
+    if (rec.docStatus === 'lunas') {
+      statusBadge = '<span class="history-doc-type-badge" style="background:#D1FAE5;color:#065F46;">LUNAS</span>';
+    } else if (rec.docStatus === 'unpaid') {
+      statusBadge = '<span class="history-doc-type-badge" style="background:#FEE2E2;color:#991B1B;">BELUM LUNAS</span>';
+    } else if (rec.docStatus === 'draft') {
+      statusBadge = '<span class="history-doc-type-badge" style="background:#FEF3C7;color:#92400E;">DRAFT</span>';
+    }
+
+    html += `<div class="history-doc-card" onclick="loadDocumentFromHistory('${rec.id}')">
+      <div class="history-doc-info">
+        <div class="history-doc-meta">
+          <span class="history-doc-type-badge" style="background:#DBEAFE;color:#1E40AF;">${DOC_PREFIXES[rec.docType] || rec.docType}</span>
+          <span class="history-doc-number">${esc(rec.docNumber)}</span>
+          ${statusBadge}
+        </div>
+        <div class="history-doc-client">Klien: <strong>${esc(rec.clientName)}</strong></div>
+        <div class="history-doc-subtext">Tersimpan: ${dateFormatted}</div>
+      </div>
+      <div class="history-doc-right">
+        <div class="history-doc-amount">${rec.totalAmt ? fmtMoney(rec.totalAmt) : '–'}</div>
+        <div class="history-doc-actions">
+          <button class="btn btn-sm btn-primary" onclick="loadDocumentFromHistory('${rec.id}')" title="Edit Dokumen Ini">
+            ✏️ Edit
+          </button>
+          <button class="btn btn-sm btn-ghost" onclick="deleteHistoryRecord('${rec.id}', event)" title="Hapus">
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function initHistorySystem() {
+  const btnHistory = document.getElementById('btn-history');
+  const btnSaveDraft = document.getElementById('btn-save-draft');
+  const btnCloseModal = document.getElementById('btn-close-history');
+  const historyModal = document.getElementById('history-modal');
+  const searchInput = document.getElementById('history-search-input');
+  const filterPills = document.querySelectorAll('#history-filter-pills .history-pill');
+
+  if (btnHistory) btnHistory.addEventListener('click', openHistoryModal);
+  if (btnSaveDraft) btnSaveDraft.addEventListener('click', () => saveCurrentDocument('manual_draft'));
+  if (btnCloseModal) btnCloseModal.addEventListener('click', closeHistoryModal);
+
+  if (historyModal) {
+    historyModal.addEventListener('click', (e) => {
+      if (e.target === historyModal) closeHistoryModal();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', renderHistoryList);
+  }
+
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      filterPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeHistoryFilter = pill.dataset.filter;
+      renderHistoryList();
+    });
+  });
+
+  updateHistoryCountBadge();
+}
+
+// Auto init auth, mobile PWA & History System on load
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   initMobileAndPWA();
+  initHistorySystem();
 });
 
