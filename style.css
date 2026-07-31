@@ -373,43 +373,47 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 
 /* ═══ RICH TEXT LISTS & PARAGRAPHS ═══ */
 .formatted-para {
-  margin-bottom: 8px;
-  line-height: 1.75;
-  color: #2D3748;
-  font-size: 11.5px;
+  margin-bottom: 10px !important;
+  line-height: 1.75 !important;
+  color: #1A1F36 !important;
+  font-size: 11.5px !important;
 }
 
 .formatted-list {
-  margin: 6px 0 12px 0;
-  padding-left: 20px;
-  list-style-type: decimal;
+  margin: 8px 0 14px 0 !important;
+  padding-left: 24px !important;
+  list-style-type: decimal !important;
+  list-style-position: outside !important;
 }
 
 .formatted-bullet-list {
-  margin: 6px 0 12px 0;
-  padding-left: 20px;
-  list-style-type: disc;
+  margin: 8px 0 14px 0 !important;
+  padding-left: 24px !important;
+  list-style-type: disc !important;
+  list-style-position: outside !important;
 }
 
 .formatted-list li, .formatted-bullet-list li {
-  margin-bottom: 8px;
-  line-height: 1.7;
-  color: #2D3748;
-  font-size: 11.5px;
-  padding-left: 4px;
+  margin-bottom: 10px !important;
+  line-height: 1.7 !important;
+  color: #1A1F36 !important;
+  font-size: 11.5px !important;
+  padding-left: 6px !important;
+  word-break: break-word !important;
 }
 
 .formatted-list li::marker {
-  font-weight: 800;
-  color: #3B5BDB;
+  font-weight: 800 !important;
+  color: #3B5BDB !important;
+  font-size: 11.5px !important;
 }
 
 .formatted-bullet-list li::marker {
-  color: #3B5BDB;
+  color: #3B5BDB !important;
 }
 
 .list-content {
-  display: inline;
+  display: inline !important;
 }
 
 .prop-timeline-tbl { width: 100%; border-collapse: collapse; }

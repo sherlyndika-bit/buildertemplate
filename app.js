@@ -758,35 +758,43 @@ function statusStampHtml() {
 /* ═══ RICH TEXT FORMATTER FOR LISTS & PARAGRAPHS ═══ */
 function formatRichText(str) {
   if (!str) return '';
-  const lines = String(str).split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  if (!lines.length) return '';
+
+  // Split lines cleanly by any newline type (\r\n or \n)
+  const rawLines = String(str)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean);
+
+  if (!rawLines.length) return '';
 
   let html = '';
   let inList = false;
   let listType = null; // 'ol' or 'ul'
 
-  lines.forEach(line => {
-    // Match numbered item (e.g. "1. ", "2. ", "1) ")
-    const numMatch = line.match(/^(\d+)[\.\)]\s*(.+)/);
-    // Match bullet item (e.g. "- ", "* ", "• ")
-    const bulletMatch = line.match(/^([-*•])\s*(.+)/);
+  rawLines.forEach((line) => {
+    // Match any line starting with numbers (e.g., "1.", "1. ", "1) ", "1.Text")
+    const numMatch = line.match(/^(\d+)[\.\)]\s*(.*)/);
+    // Match any line starting with bullets (e.g., "- ", "* ", "• ")
+    const bulletMatch = line.match(/^([-*•])\s*(.*)/);
 
-    if (numMatch) {
+    if (numMatch && numMatch[2].trim() !== '') {
       if (!inList || listType !== 'ol') {
         if (inList) html += listType === 'ol' ? '</ol>' : '</ul>';
         html += '<ol class="formatted-list">';
         inList = true;
         listType = 'ol';
       }
-      html += `<li value="${numMatch[1]}"><span class="list-content">${esc(numMatch[2])}</span></li>`;
-    } else if (bulletMatch) {
+      html += `<li value="${numMatch[1]}"><span class="list-content">${esc(numMatch[2].trim())}</span></li>`;
+    } else if (bulletMatch && bulletMatch[2].trim() !== '') {
       if (!inList || listType !== 'ul') {
         if (inList) html += listType === 'ol' ? '</ol>' : '</ul>';
         html += '<ul class="formatted-bullet-list">';
         inList = true;
         listType = 'ul';
       }
-      html += `<li><span class="list-content">${esc(bulletMatch[2])}</span></li>`;
+      html += `<li><span class="list-content">${esc(bulletMatch[2].trim())}</span></li>`;
     } else {
       if (inList) {
         html += listType === 'ol' ? '</ol>' : '</ul>';
