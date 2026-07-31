@@ -168,7 +168,22 @@
 
     <!-- ─── FORM PANEL ─── -->
     <section class="form-panel" aria-label="Form Dokumen">
-      <div class="form-panel-inner">
+        <!-- PWA INSTALL BANNER -->
+        <div id="pwa-install-banner" class="pwa-banner" style="display:none;">
+          <div class="pwa-banner-inner">
+            <div class="pwa-banner-icon">
+              <img src="anshel-logo.png" alt="Anshel Logo" />
+            </div>
+            <div class="pwa-banner-text">
+              <strong>Install Aplikasi Anshel Document</strong>
+              <span>Akses cepat &amp; bisa digunakan secara offline di HP</span>
+            </div>
+            <button class="btn btn-sm btn-primary" id="btn-banner-install">
+              📱 Install App
+            </button>
+            <button class="pwa-banner-close" id="btn-banner-close" title="Tutup">&times;</button>
+          </div>
+        </div>
 
         <!-- DOC TYPE SWITCHER -->
         <div class="doc-type-switcher">

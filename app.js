@@ -1177,9 +1177,10 @@ function initAuth() {
     });
   }
 
-  // Logout handler
+  // Logout handler (with safety confirmation dialog to prevent accidental logout on mobile)
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
+      if (!confirm('Apakah Anda yakin ingin keluar dari akun Admin Anshel?')) return;
       sessionStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(AUTH_KEY);
       document.body.classList.add('auth-locked');
@@ -1244,28 +1245,52 @@ function initMobileAndPWA() {
     });
   }
 
-  // PWA Install Prompt Listener
-  let deferredPrompt;
+  // PWA Install Prompt Listener & Banner Handler
+  let deferredPrompt = null;
   const installBtn = document.getElementById('btn-pwa-install');
+  const pwaBanner = document.getElementById('pwa-install-banner');
+  const bannerInstallBtn = document.getElementById('btn-banner-install');
+  const bannerCloseBtn = document.getElementById('btn-banner-close');
+
+  function triggerPWAInstall() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          showToast('Aplikasi Anshel Document berhasil diinstall! 📱', 'success');
+        }
+        deferredPrompt = null;
+        if (pwaBanner) pwaBanner.style.display = 'none';
+        if (installBtn) installBtn.style.display = 'none';
+      });
+    } else {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOS) {
+        alert('Untuk menginstall Anshel Document di iPhone/iPad:\n1. Ketuk ikon Share (panah ke atas) di browser Safari\n2. Pilih "Add to Home Screen" / "Tambah ke Layar Utama"');
+      } else {
+        showToast('Buka menu titik 3 browser Anda, pilih "Instal Aplikasi" / "Tambah ke Layar Utama" 📱', 'info', 5000);
+      }
+    }
+  }
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     if (installBtn) installBtn.style.display = 'inline-flex';
+    if (pwaBanner) pwaBanner.style.display = 'block';
   });
 
-  if (installBtn) {
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            showToast('Aplikasi DocPro berhasil diinstall! 📱', 'success');
-          }
-          deferredPrompt = null;
-          installBtn.style.display = 'none';
-        });
-      }
+  // Always show banner on mobile if not standalone
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (!isStandalone && pwaBanner && window.innerWidth <= 1024) {
+    pwaBanner.style.display = 'block';
+  }
+
+  if (installBtn) installBtn.addEventListener('click', triggerPWAInstall);
+  if (bannerInstallBtn) bannerInstallBtn.addEventListener('click', triggerPWAInstall);
+  if (bannerCloseBtn && pwaBanner) {
+    bannerCloseBtn.addEventListener('click', () => {
+      pwaBanner.style.display = 'none';
     });
   }
 }
