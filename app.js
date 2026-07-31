@@ -1139,23 +1139,45 @@ function exportPDF() {
     document.body.classList.add('mobile-view-preview');
   }
 
+  // Temporarily force styles to prevent html2canvas cropping
+  const originalStyle = {
+    maxWidth: el.style.maxWidth,
+    width: el.style.width,
+    overflow: el.style.overflow,
+    background: el.style.background,
+    borderRadius: el.style.borderRadius,
+    boxShadow: el.style.boxShadow
+  };
+  
+  el.style.maxWidth = '794px';
+  el.style.width = '794px';
+  el.style.overflow = 'visible';
+  el.style.background = 'white';
+  el.style.borderRadius = '0';
+  el.style.boxShadow = 'none';
+
   const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
 
   const opt = {
-    margin: [6, 6, 6, 6],
+    margin: [0, 0, 0, 0],
     filename: filename,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { 
       scale: 2, 
       useCORS: true, 
-      logging: false
+      logging: false,
+      scrollY: 0,
+      windowWidth: 794
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    pagebreak: { mode: ['css', 'legacy'] }
   };
 
   html2pdf().set(opt).from(el).save()
     .then(() => {
+      // Restore styles
+      Object.assign(el.style, originalStyle);
+      
       if (isMobileForm) {
         document.body.classList.remove('mobile-view-preview');
         document.body.classList.add('mobile-view-form');
@@ -1164,6 +1186,8 @@ function exportPDF() {
       saveCurrentDocument('pdf_export');
     })
     .catch((err) => {
+      Object.assign(el.style, originalStyle);
+      
       if (isMobileForm) {
         document.body.classList.remove('mobile-view-preview');
         document.body.classList.add('mobile-view-form');
