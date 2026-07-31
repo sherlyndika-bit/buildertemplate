@@ -924,7 +924,28 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-  }
+}
+
+/* ═══ PAGE BREAK AVOIDANCE FOR CLEAN MULTI-PAGE PDF & PRINT ═══ */
+.prop-section-heading,
+.inv-table,
+.inv-table tr,
+.inv-table thead,
+.inv-items-area,
+.inv-summary-area,
+.inv-terbilang,
+.inv-notes-box,
+.prop-closing-box,
+.inv-signature-area,
+.prop-sign-area,
+.spk-pasal,
+.spk-sign-area,
+.inv-bank-cards,
+.prop-to-section,
+.prop-kop,
+.spk-kop {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
 }
 
 /* ═══ AUTH LOCKED APP DISPLAY GUARD ═══ */
