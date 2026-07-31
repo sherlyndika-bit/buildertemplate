@@ -1058,24 +1058,68 @@ function renderSPKPreview() {
 }
 
 /* ═══════════════════════════════════════════════
-   EXPORT PDF
+   EXPORT PDF (OFFSCREEN CLONE - GUARANTEED NON-BLANK ON MOBILE & DESKTOP)
 ═══════════════════════════════════════════════ */
 function exportPDF() {
   showToast('Menyiapkan PDF...', 'info');
-  const el = document.getElementById('invoice-preview');
-  const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number')||'dokumen'}.pdf`;
-  html2pdf().set({
-    margin: [10,10,10,10], filename,
-    image: { type:'jpeg', quality:0.98 },
-    html2canvas: { scale:2, useCORS:true, logging:false },
-    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
-    pagebreak: { mode:['avoid-all', 'css', 'legacy'] },
-  }).from(el).save()
-    .then(()  => {
+  
+  const originalPreview = document.getElementById('invoice-preview');
+  if (!originalPreview) {
+    showToast('Gagal menemukan preview dokumen', 'error');
+    return;
+  }
+
+  // Create a temporary offscreen 800px A4 container for html2canvas
+  const cloneWrapper = document.createElement('div');
+  cloneWrapper.style.position = 'absolute';
+  cloneWrapper.style.left = '-9999px';
+  cloneWrapper.style.top = '0';
+  cloneWrapper.style.width = '800px';
+  cloneWrapper.style.background = '#FFFFFF';
+  cloneWrapper.style.zIndex = '-9999';
+
+  const clone = originalPreview.cloneNode(true);
+  clone.style.display = 'block';
+  clone.style.visibility = 'visible';
+  clone.style.width = '800px';
+  clone.style.maxWidth = '800px';
+  clone.style.minWidth = '800px';
+  clone.style.transform = 'none';
+  clone.style.boxShadow = 'none';
+  clone.style.margin = '0';
+  clone.style.padding = '36px 40px';
+
+  cloneWrapper.appendChild(clone);
+  document.body.appendChild(cloneWrapper);
+
+  const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
+
+  const opt = {
+    margin: [8, 8, 8, 8],
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2, 
+      useCORS: true, 
+      logging: false,
+      width: 800,
+      windowWidth: 800
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  html2pdf().set(opt).from(clone).save()
+    .then(() => {
+      if (document.body.contains(cloneWrapper)) document.body.removeChild(cloneWrapper);
       showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success');
       saveCurrentDocument('pdf_export');
     })
-    .catch(() => showToast('Gagal membuat PDF', 'error'));
+    .catch((err) => {
+      if (document.body.contains(cloneWrapper)) document.body.removeChild(cloneWrapper);
+      console.error('PDF export error:', err);
+      showToast('Gagal membuat PDF. Coba gunakan tombol Cetak -> Save as PDF', 'error');
+    });
 }
 
 /* ═══════════════════════════════════════════════
