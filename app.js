@@ -805,7 +805,17 @@ function formatRichText(str) {
         inList = false;
         listType = null;
       }
-      html += `<p class="formatted-para">${esc(line)}</p>`;
+      
+      // Escape HTML first to prevent XSS
+      let formattedLine = esc(line);
+      
+      // Bold Markdown
+      formattedLine = formattedLine.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      
+      // Auto-format "Pasal X - " prefixes for SPK
+      formattedLine = formattedLine.replace(/^(Pasal\s+\d+[\s\-\:]+)/i, '<strong class="pasal-prefix">$1</strong>');
+      
+      html += `<p class="formatted-para">${formattedLine}</p>`;
     }
   });
 

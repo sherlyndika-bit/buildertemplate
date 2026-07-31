@@ -444,6 +444,7 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 .spk-pasal { padding: 0 48px; margin-bottom: 14px; }
 .spk-pasal-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #1A1F36; background: #F8F9FB; padding: 6px 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #C92A2A; }
 .spk-pasal-body { font-size: 11.5px; color: #3D4663; line-height: 1.8; padding: 0 4px; }
+.pasal-prefix { color: #C92A2A; font-weight: 800; display: inline-block; margin-right: 4px; }
 .spk-scope-list { list-style: none; padding: 0; }
 .spk-scope-list li { display: flex; gap: 8px; padding: 4px 0; font-size: 11.5px; color: #3D4663; }
 .spk-scope-num { width: 20px; height: 20px; background: #FFF5F5; color: #C92A2A; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; flex-shrink: 0; }
