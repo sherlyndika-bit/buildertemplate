@@ -121,7 +121,13 @@ input[type="text"], input[type="email"], input[type="number"], input[type="date"
 }
 input:focus, textarea:focus, select:focus { border-color: var(--color-border-focus); box-shadow: 0 0 0 3px rgba(59,91,219,0.09); }
 input::placeholder, textarea::placeholder { color: var(--color-text-3); }
-textarea { resize: vertical; min-height: 58px; }
+textarea {
+  resize: vertical;
+  min-height: 58px;
+  overflow-y: hidden !important;
+  line-height: 1.6 !important;
+  font-family: var(--font-base) !important;
+}
 select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238B93A9' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 11px center; padding-right: 30px; }
 .input-with-badge { position: relative; display: flex; }
 .input-with-badge input { padding-right: 36px; flex: 1; }

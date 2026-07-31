@@ -1496,6 +1496,7 @@ function loadDocumentFromHistory(id) {
 
   renderAllLists();
   renderPreview();
+  initSmartTextareas();
 
   // Close modal
   closeHistoryModal();
@@ -1631,10 +1632,89 @@ function initHistorySystem() {
   updateHistoryCountBadge();
 }
 
-// Auto init auth, mobile PWA & History System on load
+/* ═══════════════════════════════════════════════
+   SMART TEXTAREA AUTO-RESIZE & BULLET FORMATTER
+═══════════════════════════════════════════════ */
+function initSmartTextareas() {
+  const textareas = document.querySelectorAll('textarea');
+
+  textareas.forEach(ta => {
+    // Disable spellcheck dynamically to remove red wavy lines under Indonesian text
+    ta.setAttribute('spellcheck', 'false');
+    ta.setAttribute('autocomplete', 'off');
+
+    // Auto height function
+    const autoResize = () => {
+      ta.style.height = 'auto';
+      ta.style.height = (ta.scrollHeight + 6) + 'px';
+    };
+
+    ta.addEventListener('input', autoResize);
+    ta.addEventListener('focus', autoResize);
+
+    // Initial resize
+    setTimeout(autoResize, 80);
+
+    // Smart Enter key for numbered & bullet lists (e.g. 1. 2. 3. or - )
+    ta.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const start = ta.selectionStart;
+        const value = ta.value;
+        const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+        const line = value.substring(lineStart, start);
+
+        // Match numbered bullet list (e.g., "1. ", "2. ")
+        const numMatch = line.match(/^(\d+)\.\s+/);
+        // Match dash/bullet list (e.g., "- ", "* ")
+        const bulletMatch = line.match(/^([-*•])\s+/);
+
+        if (numMatch) {
+          e.preventDefault();
+          const nextNum = parseInt(numMatch[1], 10) + 1;
+          const currentContent = line.substring(numMatch[0].length).trim();
+
+          if (currentContent === '') {
+            // Empty bullet line -> press enter to exit bullet list
+            const newValue = value.substring(0, lineStart) + value.substring(start);
+            ta.value = newValue;
+            ta.selectionStart = ta.selectionEnd = lineStart;
+          } else {
+            // Add next number automatically
+            const insertText = `\n${nextNum}. `;
+            const newValue = value.substring(0, start) + insertText + value.substring(start);
+            ta.value = newValue;
+            ta.selectionStart = ta.selectionEnd = start + insertText.length;
+          }
+          autoResize();
+          triggerUpdate();
+        } else if (bulletMatch) {
+          e.preventDefault();
+          const bullet = bulletMatch[1];
+          const currentContent = line.substring(bulletMatch[0].length).trim();
+
+          if (currentContent === '') {
+            const newValue = value.substring(0, lineStart) + value.substring(start);
+            ta.value = newValue;
+            ta.selectionStart = ta.selectionEnd = lineStart;
+          } else {
+            const insertText = `\n${bullet} `;
+            const newValue = value.substring(0, start) + insertText + value.substring(start);
+            ta.value = newValue;
+            ta.selectionStart = ta.selectionEnd = start + insertText.length;
+          }
+          autoResize();
+          triggerUpdate();
+        }
+      }
+    });
+  });
+}
+
+// Auto init auth, mobile PWA, History System & Smart Textareas on load
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   initMobileAndPWA();
   initHistorySystem();
+  initSmartTextareas();
 });
 
