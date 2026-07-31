@@ -882,14 +882,49 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 }
 
 
-/* ── Print ──────────────────────── */
+/* ── Print Engine (100% Vector PDF) ──────────────────────── */
 @media print {
-  body { background: white !important; }
-  .app-header, .form-panel, .preview-toolbar, .login-overlay { display: none !important; }
-  .app-main { display: block !important; padding: 0 !important; max-width: 100% !important; }
-  .preview-panel { position: static !important; max-height: none !important; }
-  .preview-wrapper { background: white !important; border: none !important; padding: 0 !important; max-height: none !important; overflow: visible !important; }
-  .invoice-doc { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; }
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+  html, body {
+    background: white !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .app-header, .form-panel, .preview-toolbar, .login-overlay, .mobile-view-tabs, .mobile-sticky-bar, .toast, .pwa-banner, .history-modal-overlay {
+    display: none !important;
+  }
+  .app-main {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .preview-panel {
+    position: static !important;
+    max-height: none !important;
+    width: 100% !important;
+    display: block !important;
+  }
+  .preview-wrapper {
+    background: white !important;
+    border: none !important;
+    padding: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .invoice-doc {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 /* ═══ AUTH LOCKED APP DISPLAY GUARD ═══ */
