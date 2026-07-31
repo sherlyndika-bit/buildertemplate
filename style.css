@@ -230,7 +230,7 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 /* Header band */
 .inv-header-band { padding: 28px 48px 22px; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; background: white; }
 .inv-company-block { display: flex; align-items: flex-start; gap: 14px; flex: 1; }
-.inv-company-logo { width: 90px; height: 64px; display: flex; flex-shrink: 0; }
+.inv-company-logo { width: 140px; height: 96px; display: flex; flex-shrink: 0; }
 .inv-company-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .inv-company-info-name { font-size: 15px; font-weight: 800; color: #1A1F36; letter-spacing: -0.2px; }
 .inv-company-info-detail { font-size: 10.5px; color: #6B7A99; line-height: 1.65; margin-top: 2px; }
@@ -350,7 +350,7 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 /* ── Proposal Preview ───────────── */
 .prop-kop { padding: 28px 48px 20px; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .prop-kop-left { display: flex; gap: 12px; align-items: flex-start; }
-.prop-kop-logo { width: 80px; height: 56px; display: flex; flex-shrink: 0; }
+.prop-kop-logo { width: 130px; height: 84px; display: flex; flex-shrink: 0; }
 .prop-kop-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .prop-sender-name { font-size: 14px; font-weight: 800; color: #1A1F36; }
 .prop-sender-detail { font-size: 10px; color: #6B7A99; line-height: 1.6; }
@@ -430,7 +430,7 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 /* ── SPK Preview ────────────────── */
 .spk-kop { text-align: center; padding: 28px 48px 18px; border-bottom: 3px double #1A1F36; }
 .spk-kop-inner { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 8px; }
-.spk-kop-logo { width: 72px; height: 52px; display: flex; flex-shrink: 0; }
+.spk-kop-logo { width: 130px; height: 84px; display: flex; flex-shrink: 0; }
 .spk-kop-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .spk-company-name { font-size: 17px; font-weight: 900; color: #1A1F36; letter-spacing: 0.5px; text-align: left; }
 .spk-company-detail { font-size: 10px; color: #6B7A99; line-height: 1.5; text-align: left; }
@@ -1213,13 +1213,16 @@ body.auth-locked .app-main {
 }
 
 /* Metallic gold accent border right under top header stripe */
+.inv-header-band { position: relative; }
 .inv-header-band::after {
   content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
   display: block;
   width: 100%;
   height: 3px;
   background: linear-gradient(90deg, #1E3A8A 0%, #D97706 50%, #1E3A8A 100%);
-  margin-top: 18px;
 }
 
 /* Subtle luxury watermark stamp border */
