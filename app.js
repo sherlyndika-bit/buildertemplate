@@ -56,7 +56,26 @@ let timelineItems   = [{ id: uid(), tahap: '', deskripsi: '', durasi: '' }];
 function uid() { return '_' + Math.random().toString(36).slice(2, 9); }
 
 const DOC_PREFIXES = { invoice:'INV', proposal:'PRP', penawaran:'QUO', spk:'SPK' };
-const DOC_LABELS   = { invoice:'Invoice', proposal:'Proposal', penawaran:'Penawaran', spk:'SPK' };
+const DOC_LABELS   = { invoice:'Invoice', proposal:'Proposal', penawaran:'Penawaran', spk:'Surat Perjanjian Kerjasama (SPK)' };
+
+/* ── Terbilang (Indonesian amount in words) ── */
+function terbilang(n) {
+  n = Math.round(Number(n) || 0);
+  if (!n || isNaN(n) || n <= 0) return 'nol';
+  const ones = ['','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan',
+    'sepuluh','sebelas','dua belas','tiga belas','empat belas','lima belas',
+    'enam belas','tujuh belas','delapan belas','sembilan belas'];
+  const tens = ['','','dua puluh','tiga puluh','empat puluh','lima puluh',
+    'enam puluh','tujuh puluh','delapan puluh','sembilan puluh'];
+  let r = '';
+  if (n >= 1000000000) { r += terbilang(Math.floor(n/1e9)) + ' miliar '; n %= 1e9; }
+  if (n >= 1000000)    { r += terbilang(Math.floor(n/1e6)) + ' juta ';   n %= 1e6; }
+  if (n >= 1000)       { const k = Math.floor(n/1000); r += (k===1 ? 'seribu' : terbilang(k)+' ribu') + ' '; n %= 1000; }
+  if (n >= 100)        { const h = Math.floor(n/100); r += (h===1 ? 'seratus' : terbilang(h)+' ratus') + ' '; n %= 100; }
+  if (n >= 20)         { r += tens[Math.floor(n/10)] + ' '; n %= 10; }
+  if (n > 0 && n < 20) r += ones[n] + ' ';
+  return r.trim();
+}
 
 function generateDocNumber(type) {
   const n = new Date(), rand = String(Math.floor(Math.random()*900)+100);
@@ -933,7 +952,7 @@ function renderSPKPreview() {
         ${val('sender-npwp') ? `<div class="spk-company-detail">NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
       </div>
     </div>
-    <div class="spk-doc-title">Surat Perintah Kerja</div>
+    <div class="spk-doc-title">Surat Perjanjian Kerjasama</div>
     <div class="spk-doc-number">No: ${esc(val('invoice-number'))||'SPK-000'}</div>
   </div>
   <div class="inv-stripe c-spk"></div>
@@ -984,7 +1003,7 @@ function renderSPKPreview() {
   </div>` : ''}
   <div class="spk-pasal" style="margin-bottom:0">
     <div class="spk-pasal-title">Tanda Tangan Para Pihak</div>
-    <div class="spk-pasal-body">Demikian SPK ini dibuat dan ditandatangani pada tanggal <strong>${formatDate(val('invoice-date'))}</strong>.</div>
+    <div class="spk-pasal-body">Demikian Surat Perjanjian Kerjasama ini dibuat dan ditandatangani pada tanggal <strong>${formatDate(val('invoice-date'))}</strong>.</div>
   </div>
   <div class="spk-sign-area">
     <div class="spk-sign-box">
@@ -1017,7 +1036,7 @@ function exportPDF() {
     image: { type:'jpeg', quality:0.98 },
     html2canvas: { scale:2, useCORS:true, logging:false },
     jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
-    pagebreak: { mode:['avoid-all'] },
+    pagebreak: { mode:['avoid-all', 'css', 'legacy'] },
   }).from(el).save()
     .then(()  => showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success'))
     .catch(() => showToast('Gagal membuat PDF', 'error'));
@@ -1077,7 +1096,6 @@ function initAuth() {
   const overlay = document.getElementById('login-overlay');
   const loginForm = document.getElementById('login-form');
   const errorAlert = document.getElementById('login-error');
-  const fillBtn = document.getElementById('btn-fill-creds');
   const logoutBtn = document.getElementById('btn-logout');
 
   // Check existing session
@@ -1086,20 +1104,11 @@ function initAuth() {
     try {
       const authData = JSON.parse(savedSession);
       if (authData && authData.isAuth) {
+        document.body.classList.remove('auth-locked');
         if (overlay) overlay.classList.add('hidden');
         updateHeaderUser(authData.username || 'Admin Anshel');
       }
     } catch(e) {}
-  }
-
-  // Quick fill button handler
-  if (fillBtn) {
-    fillBtn.addEventListener('click', () => {
-      const uInput = document.getElementById('login-username');
-      const pInput = document.getElementById('login-password');
-      if (uInput) uInput.value = 'Admin Anshel';
-      if (pInput) pInput.value = 'Anshel2026.';
-    });
   }
 
   // Submit login handler
@@ -1119,6 +1128,7 @@ function initAuth() {
         sessionStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
         localStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
         
+        document.body.classList.remove('auth-locked');
         updateHeaderUser(u);
         if (overlay) overlay.classList.add('hidden');
         showToast(`Selamat datang, ${u}! 👋`, 'success');
@@ -1136,6 +1146,7 @@ function initAuth() {
     logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem(AUTH_KEY);
       localStorage.removeItem(AUTH_KEY);
+      document.body.classList.add('auth-locked');
       if (overlay) overlay.classList.remove('hidden');
       document.getElementById('login-password').value = '';
       showToast('Berhasil keluar dari sistem', 'info');

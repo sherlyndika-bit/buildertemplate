@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DocPro Internal | Invoice · Proposal · Penawaran · SPK</title>
-  <meta name="description" content="Sistem pembuatan dokumen internal profesional: Invoice, Proposal, Surat Penawaran, dan SPK." />
+  <title>DocPro Internal | Invoice · Proposal · Penawaran · Surat Perjanjian Kerjasama (SPK)</title>
+  <meta name="description" content="Sistem pembuatan dokumen internal profesional: Invoice, Proposal, Surat Penawaran, dan Surat Perjanjian Kerjasama (SPK)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="auth-locked">
 
   <!-- ═══ LOGIN OVERLAY ═══ -->
   <div id="login-overlay" class="login-overlay">
@@ -58,13 +58,6 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </form>
-
-      <div class="login-footer-hint">
-        <span class="hint-label">Akses Internal:</span> 
-        <button type="button" id="btn-fill-creds" class="btn-fill-hint" title="Klik untuk mengisi otomatis">
-          <code>Admin Anshel</code> / <code>Anshel2026.</code>
-        </button>
-      </div>
     </div>
   </div>
 
@@ -134,7 +127,7 @@
           </button>
           <button class="doc-type-btn" data-type="spk" id="tab-spk">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-            SPK
+            SPK (Perjanjian Kerjasama)
           </button>
         </div>
 
