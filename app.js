@@ -40,7 +40,7 @@ const BANK_DATA = {
    STATE
 ═══════════════════════════════════════════════ */
 let currentDocType  = 'invoice';
-let logoDataUrl     = null;
+let logoDataUrl     = 'anshel-logo.png';
 let docStatus       = '';
 let dpEnabled       = false;
 let dpPercent       = 50;
