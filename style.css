@@ -887,6 +887,11 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 
 /* ── Print Engine (100% Vector PDF) ──────────────────────── */
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
   @page {
     size: A4 portrait;
     margin: 8mm 10mm;
