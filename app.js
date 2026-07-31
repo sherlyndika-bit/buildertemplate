@@ -755,12 +755,61 @@ function statusStampHtml() {
   return `<div class="inv-status-stamp ${cls} visible">${docStatus}</div>`;
 }
 
+/* ═══ RICH TEXT FORMATTER FOR LISTS & PARAGRAPHS ═══ */
+function formatRichText(str) {
+  if (!str) return '';
+  const lines = String(str).split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!lines.length) return '';
+
+  let html = '';
+  let inList = false;
+  let listType = null; // 'ol' or 'ul'
+
+  lines.forEach(line => {
+    // Match numbered item (e.g. "1. ", "2. ", "1) ")
+    const numMatch = line.match(/^(\d+)[\.\)]\s*(.+)/);
+    // Match bullet item (e.g. "- ", "* ", "• ")
+    const bulletMatch = line.match(/^([-*•])\s*(.+)/);
+
+    if (numMatch) {
+      if (!inList || listType !== 'ol') {
+        if (inList) html += listType === 'ol' ? '</ol>' : '</ul>';
+        html += '<ol class="formatted-list">';
+        inList = true;
+        listType = 'ol';
+      }
+      html += `<li value="${numMatch[1]}"><span class="list-content">${esc(numMatch[2])}</span></li>`;
+    } else if (bulletMatch) {
+      if (!inList || listType !== 'ul') {
+        if (inList) html += listType === 'ol' ? '</ol>' : '</ul>';
+        html += '<ul class="formatted-bullet-list">';
+        inList = true;
+        listType = 'ul';
+      }
+      html += `<li><span class="list-content">${esc(bulletMatch[2])}</span></li>`;
+    } else {
+      if (inList) {
+        html += listType === 'ol' ? '</ol>' : '</ul>';
+        inList = false;
+        listType = null;
+      }
+      html += `<p class="formatted-para">${esc(line)}</p>`;
+    }
+  });
+
+  if (inList) {
+    html += listType === 'ol' ? '</ol>' : '</ul>';
+  }
+
+  return html;
+}
+
 function notesBlockHtml() {
   const notes = val('notes');
   if (!notes.trim()) return '';
   return `<div class="inv-footer-info"><div class="inv-notes-box">
     <div class="inv-notes-label">Catatan</div>
-    <div class="inv-notes-text">${esc(notes)}</div>
+    <div class="inv-notes-text">${formatRichText(notes)}</div>
   </div></div>`;
 }
 
@@ -852,7 +901,7 @@ function renderPenawaranPreview() {
   ${terbilangBlockHtml()}
   ${terms.trim() ? `<div class="inv-footer-info"><div class="inv-notes-box" style="border-left-color:#E67700">
     <div class="inv-notes-label">Syarat &amp; Ketentuan</div>
-    <div class="inv-notes-text">${esc(terms)}</div>
+    <div class="inv-notes-text">${formatRichText(terms)}</div>
   </div></div>` : ''}
   ${bankCardsHtml()}
   ${notesBlockHtml()}
@@ -916,8 +965,8 @@ function renderProposalPreview() {
     <div class="prop-to-date">Tanggal: ${formatDate(val('invoice-date'))}</div>
   </div>
   <div class="prop-body">
-    ${val('proposal-latar') ? `<div class="prop-section-heading">Latar Belakang</div><div class="prop-text">${esc(val('proposal-latar'))}</div>` : ''}
-    ${val('proposal-tujuan') ? `<div class="prop-section-heading">Tujuan &amp; Sasaran</div><div class="prop-text">${esc(val('proposal-tujuan'))}</div>` : ''}
+    ${val('proposal-latar') ? `<div class="prop-section-heading">Latar Belakang</div><div class="prop-text">${formatRichText(val('proposal-latar'))}</div>` : ''}
+    ${val('proposal-tujuan') ? `<div class="prop-section-heading">Tujuan &amp; Sasaran</div><div class="prop-text">${formatRichText(val('proposal-tujuan'))}</div>` : ''}
     ${scopeItems.length ? `<div class="prop-section-heading">Ruang Lingkup Pekerjaan</div>${scopeHtml}` : ''}
     ${hasTimeline ? `<div class="prop-section-heading">Timeline / Jadwal</div>${timelineHtml}` : ''}
     <div class="prop-section-heading">Rincian Anggaran</div>
@@ -1022,12 +1071,12 @@ function renderSPKPreview() {
         <div class="spk-value-amount">${nilaiText}</div>
         ${nilaiRaw > 0 ? `<div style="font-size:10.5px;color:#6B7A99;margin-top:3px;font-style:italic">${terbilangRupiah(nilaiRaw)}</div>` : ''}
       </div>
-      ${caraBayar ? `<strong>Cara Pembayaran / Termin:</strong><br><span style="white-space:pre-line;font-size:11px;line-height:1.8;color:#3D4663">${esc(caraBayar)}</span>` : ''}
+      ${caraBayar ? `<strong>Cara Pembayaran / Termin:</strong><br><div style="font-size:11px;line-height:1.8;color:#3D4663;margin-top:4px;">${formatRichText(caraBayar)}</div>` : ''}
     </div>
   </div>
   ${syarat ? `<div class="spk-pasal">
     <div class="spk-pasal-title">Pasal 4 – Syarat &amp; Ketentuan Umum</div>
-    <div class="spk-pasal-body" style="white-space:pre-line;font-size:11px;line-height:1.9;">${esc(syarat)}</div>
+    <div class="spk-pasal-body" style="font-size:11px;line-height:1.9;">${formatRichText(syarat)}</div>
   </div>` : ''}
   <div class="spk-pasal" style="margin-bottom:0">
     <div class="spk-pasal-title">Tanda Tangan Para Pihak</div>
