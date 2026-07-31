@@ -1139,36 +1139,24 @@ function exportPDF() {
     document.body.classList.add('mobile-view-preview');
   }
 
-  // Temporarily isolate the element to prevent html2canvas cropping
-  const parent = el.parentNode;
-  const nextSibling = el.nextSibling;
-  document.body.appendChild(el);
-
+  // Temporarily force styles to prevent html2canvas cropping
   const originalStyle = {
-    position: el.style.position,
-    left: el.style.left,
-    top: el.style.top,
-    margin: el.style.margin,
     maxWidth: el.style.maxWidth,
     width: el.style.width,
     overflow: el.style.overflow,
     background: el.style.background,
+    margin: el.style.margin,
     borderRadius: el.style.borderRadius,
-    boxShadow: el.style.boxShadow,
-    zIndex: el.style.zIndex
+    boxShadow: el.style.boxShadow
   };
   
-  el.style.position = 'absolute';
-  el.style.left = '0';
-  el.style.top = '0';
-  el.style.margin = '0';
   el.style.maxWidth = '794px';
   el.style.width = '794px';
+  el.style.margin = '0 auto';
   el.style.overflow = 'visible';
   el.style.background = 'white';
   el.style.borderRadius = '0';
   el.style.boxShadow = 'none';
-  el.style.zIndex = '99999';
 
   const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
 
@@ -1179,10 +1167,7 @@ function exportPDF() {
     html2canvas: { 
       scale: 2, 
       useCORS: true, 
-      logging: false,
-      scrollY: 0,
-      scrollX: 0,
-      windowWidth: 794
+      logging: false
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'] }
@@ -1190,9 +1175,8 @@ function exportPDF() {
 
   html2pdf().set(opt).from(el).save()
     .then(() => {
-      // Restore styles and DOM position
+      // Restore styles
       Object.assign(el.style, originalStyle);
-      parent.insertBefore(el, nextSibling);
       
       if (isMobileForm) {
         document.body.classList.remove('mobile-view-preview');
@@ -1203,7 +1187,6 @@ function exportPDF() {
     })
     .catch((err) => {
       Object.assign(el.style, originalStyle);
-      parent.insertBefore(el, nextSibling);
       
       if (isMobileForm) {
         document.body.classList.remove('mobile-view-preview');
