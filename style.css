@@ -367,14 +367,6 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 
 .prop-closing-box { margin: 0 48px; background: #F3F0FF; border-radius: 10px; padding: 14px 16px; }
 .prop-closing-text { font-size: 11.5px; color: #3D4663; line-height: 1.8; white-space: pre-line; }
-.prop-sign-area { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 20px 48px 36px; margin-top: 16px; border-top: 1px dashed #DDE1EF; }
-.prop-sign-box { text-align: center; }
-.prop-sign-role { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #8B93A9; margin-bottom: 2px; }
-.prop-sign-party { font-size: 11.5px; font-weight: 700; color: #1A1F36; margin-bottom: 42px; }
-.prop-sign-line { border-top: 1px solid #C8CDD9; padding-top: 6px; }
-.prop-sign-name { font-size: 11px; font-weight: 700; color: #1A1F36; }
-.prop-sign-title { font-size: 10px; color: #8B93A9; }
-
 /* ── SPK Preview ────────────────── */
 .spk-kop { text-align: center; padding: 28px 48px 18px; border-bottom: 3px double #1A1F36; }
 .spk-kop-inner { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 8px; }
@@ -397,13 +389,17 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 .spk-value-box { background: #FFF5F5; border: 1px solid #FECACA; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
 .spk-value-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; color: #8B93A9; letter-spacing: 0.06em; margin-bottom: 4px; }
 .spk-value-amount { font-size: 22px; font-weight: 900; color: #C92A2A; letter-spacing: -0.5px; }
-.spk-sign-area { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 20px 48px 36px; margin-top: 16px; border-top: 1px dashed #DDE1EF; }
-.spk-sign-box { text-align: center; }
-.spk-sign-role { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #8B93A9; }
-.spk-sign-party { font-size: 11.5px; font-weight: 700; color: #1A1F36; margin: 2px 0 44px; }
-.spk-sign-line { border-top: 1px solid #C8CDD9; padding-top: 6px; }
-.spk-sign-name { font-size: 11.5px; font-weight: 800; color: #1A1F36; }
-.spk-sign-title { font-size: 10px; color: #8B93A9; }
+
+/* ── Dual Signature Alignment ── */
+.prop-sign-area, .spk-sign-area { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 24px 48px 36px; margin-top: 20px; border-top: 1px dashed #DDE1EF; }
+.prop-sign-box, .spk-sign-box { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.prop-sign-role, .spk-sign-role { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #8B93A9; }
+.prop-sign-party, .spk-sign-party { font-size: 11.5px; font-weight: 700; color: #1A1F36; margin: 3px 0 6px; min-height: 18px; }
+.dual-sign-space { width: 100%; height: 72px; display: flex; align-items: center; justify-content: center; }
+.dual-sign-space img { max-height: 68px; max-width: 160px; object-fit: contain; mix-blend-mode: multiply; filter: contrast(1.1); }
+.prop-sign-line, .spk-sign-line { width: 100%; max-width: 200px; border-top: 1.5px solid #C8CDD9; padding-top: 6px; margin-top: 2px; text-align: center; }
+.prop-sign-name, .spk-sign-name { font-size: 11.5px; font-weight: 800; color: #1A1F36; }
+.prop-sign-title, .spk-sign-title { font-size: 10px; color: #8B93A9; margin-top: 2px; }
 
 /* ── Toast ──────────────────────── */
 .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; padding: 10px 18px; background: var(--color-text); color: white; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(14px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; max-width: 300px; }

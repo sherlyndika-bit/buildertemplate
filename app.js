@@ -917,15 +917,19 @@ function renderProposalPreview() {
     <div class="prop-sign-box">
       <div class="prop-sign-role">Pihak Penerima</div>
       <div class="prop-sign-party">${esc(val('client-name'))||'Penerima'}</div>
+      <div class="dual-sign-space"></div>
       <div class="prop-sign-line">
         <div class="prop-sign-name">( ___________________ )</div>
+        <div class="prop-sign-title">Penerima / Klien</div>
       </div>
     </div>
     <div class="prop-sign-box">
       <div class="prop-sign-role">Pihak Pengaju</div>
       <div class="prop-sign-party">${esc(val('sender-name'))||'Pengirim'}</div>
+      <div class="dual-sign-space">
+        <img src="default-signature.png" alt="Tanda Tangan" />
+      </div>
       <div class="prop-sign-line">
-        <div class="inv-sign-img-wrap" style="margin-bottom:4px;"><img src="default-signature.png" alt="Tanda Tangan" /></div>
         <div class="prop-sign-name">${sigName || esc(val('sender-name')) || '( ___________________ )'}</div>
         ${sigTitle ? `<div class="prop-sign-title">${sigTitle}</div>` : ''}
       </div>
@@ -1014,8 +1018,10 @@ function renderSPKPreview() {
     <div class="spk-sign-box">
       <div class="spk-sign-role">Pihak Pertama</div>
       <div class="spk-sign-party">${esc(val('sender-name'))||'Pemberi Kerja'}</div>
+      <div class="dual-sign-space">
+        <img src="default-signature.png" alt="Tanda Tangan" />
+      </div>
       <div class="spk-sign-line">
-        <div class="inv-sign-img-wrap" style="margin-bottom:4px;"><img src="default-signature.png" alt="Tanda Tangan" /></div>
         <div class="spk-sign-name">${sigName || esc(val('sender-name')).substring(0,22) || '( _______________ )'}</div>
         ${sigTitle ? `<div class="spk-sign-title">${sigTitle}</div>` : ''}
       </div>
@@ -1023,8 +1029,10 @@ function renderSPKPreview() {
     <div class="spk-sign-box">
       <div class="spk-sign-role">Pihak Kedua</div>
       <div class="spk-sign-party">${esc(val('client-name'))||'Penerima Kerja'}</div>
+      <div class="dual-sign-space"></div>
       <div class="spk-sign-line">
         <div class="spk-sign-name">${esc(val('client-name')).substring(0,22)||'( _______________ )'}</div>
+        <div class="spk-sign-title">Penerima Kerja</div>
       </div>
     </div>
   </div>`;
