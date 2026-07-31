@@ -47,7 +47,7 @@ body { font-family: var(--font-base); background: var(--color-bg); color: var(--
 }
 .header-inner { max-width: 1600px; margin: 0 auto; padding: 0 24px; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .header-brand { display: flex; align-items: center; gap: 10px; }
-.brand-icon { width: 34px; height: 34px; background: linear-gradient(140deg, #3B5BDB 0%, #5F3DC4 100%); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 3px 10px rgba(59,91,219,0.38); }
+.brand-icon { width: 36px; height: 36px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 .brand-text { display: flex; align-items: center; gap: 8px; }
 .brand-name { font-size: 16px; font-weight: 800; color: var(--color-text); letter-spacing: -0.4px; }
 .brand-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; background: linear-gradient(135deg, #3B5BDB, #5F3DC4); color: white; border-radius: 99px; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -584,15 +584,16 @@ body.auth-locked .app-main {
 }
 
 .login-logo-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #1E3A8A, #2563EB);
-  color: white;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .login-title-group h2 {

@@ -1,6 +1,6 @@
 {
-  "name": "DocPro Internal Executive System",
-  "short_name": "DocPro",
+  "name": "Anshel Document Executive System",
+  "short_name": "Anshel Document",
   "description": "Sistem Pembuatan Dokumen Internal (Invoice, Proposal, Penawaran, SPK)",
   "start_url": "./index.html",
   "display": "standalone",
@@ -8,6 +8,12 @@
   "theme_color": "#1E3A8A",
   "orientation": "any",
   "icons": [
+    {
+      "src": "anshel-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",
