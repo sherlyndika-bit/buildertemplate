@@ -671,9 +671,9 @@ function senderBlockHtml(small=false) {
       ${logoDataUrl ? `<div class="inv-company-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="inv-company-info-name">${nm}</div>
-        ${addr ? `<div class="inv-company-info-detail">${addr}</div>` : ''}
+        ${addr ? `<div class="inv-company-info-detail">📍 ${addr}</div>` : ''}
         ${contacts ? `<div class="inv-company-info-detail">${contacts}</div>` : ''}
-        ${npwp ? `<div class="inv-company-info-detail">NPWP: ${npwp}</div>` : ''}
+        ${npwp ? `<div class="inv-company-info-detail">💳 NPWP: ${npwp}</div>` : ''}
       </div>
     </div>`;
 }
@@ -959,9 +959,9 @@ function renderProposalPreview() {
       ${logoDataUrl ? `<div class="prop-kop-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="prop-sender-name">${esc(val('sender-name'))||'Nama Perusahaan'}</div>
-        ${val('sender-address') ? `<div class="prop-sender-detail">${esc(val('sender-address'))}</div>` : ''}
-        ${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).length ? `<div class="prop-sender-detail">${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
-        ${val('sender-npwp') ? `<div class="prop-sender-detail">NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
+        ${val('sender-address') ? `<div class="prop-sender-detail">📍 ${esc(val('sender-address'))}</div>` : ''}
+        ${[val('sender-phone') && `📞 ${esc(val('sender-phone'))}`, val('sender-email') && `✉ ${esc(val('sender-email'))}`, val('sender-website') && `🌐 ${esc(val('sender-website'))}`].filter(Boolean).length ? `<div class="prop-sender-detail">${[val('sender-phone') && `📞 ${esc(val('sender-phone'))}`, val('sender-email') && `✉ ${esc(val('sender-email'))}`, val('sender-website') && `🌐 ${esc(val('sender-website'))}`].filter(Boolean).join(' · ')}</div>` : ''}
+        ${val('sender-npwp') ? `<div class="prop-sender-detail">💳 NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
       </div>
     </div>
     <div>
@@ -1038,9 +1038,9 @@ function renderSPKPreview() {
       ${logoDataUrl ? `<div class="spk-kop-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="spk-company-name">${esc(val('sender-name'))||'Nama Perusahaan'}</div>
-        ${val('sender-address') ? `<div class="spk-company-detail">${esc(val('sender-address'))}</div>` : ''}
-        ${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).length ? `<div class="spk-company-detail">${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
-        ${val('sender-npwp') ? `<div class="spk-company-detail">NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
+        ${val('sender-address') ? `<div class="spk-company-detail">📍 ${esc(val('sender-address'))}</div>` : ''}
+        ${[val('sender-phone') && `📞 ${esc(val('sender-phone'))}`, val('sender-email') && `✉ ${esc(val('sender-email'))}`, val('sender-website') && `🌐 ${esc(val('sender-website'))}`].filter(Boolean).length ? `<div class="spk-company-detail">${[val('sender-phone') && `📞 ${esc(val('sender-phone'))}`, val('sender-email') && `✉ ${esc(val('sender-email'))}`, val('sender-website') && `🌐 ${esc(val('sender-website'))}`].filter(Boolean).join(' · ')}</div>` : ''}
+        ${val('sender-npwp') ? `<div class="spk-company-detail">💳 NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
       </div>
     </div>
     <div class="spk-doc-title">Surat Perjanjian Kerjasama</div>
