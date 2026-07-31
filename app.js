@@ -1063,3 +1063,98 @@ function resetForm() {
   renderPreview();
   showToast('Form berhasil direset', 'info');
 }
+
+/* ═══════════════════════════════════════════════
+   AUTHENTICATION & SESSION GUARD
+═══════════════════════════════════════════════ */
+const AUTH_KEY = 'docpro_internal_auth';
+const VALID_CREDS = [
+  { user: 'Admin Anshel', pass: 'Anshel2026.' },
+  { user: 'admin', pass: 'admin123' },
+];
+
+function initAuth() {
+  const overlay = document.getElementById('login-overlay');
+  const loginForm = document.getElementById('login-form');
+  const errorAlert = document.getElementById('login-error');
+  const fillBtn = document.getElementById('btn-fill-creds');
+  const logoutBtn = document.getElementById('btn-logout');
+
+  // Check existing session
+  const savedSession = sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY);
+  if (savedSession) {
+    try {
+      const authData = JSON.parse(savedSession);
+      if (authData && authData.isAuth) {
+        if (overlay) overlay.classList.add('hidden');
+        updateHeaderUser(authData.username || 'Admin Anshel');
+      }
+    } catch(e) {}
+  }
+
+  // Quick fill button handler
+  if (fillBtn) {
+    fillBtn.addEventListener('click', () => {
+      const uInput = document.getElementById('login-username');
+      const pInput = document.getElementById('login-password');
+      if (uInput) uInput.value = 'Admin Anshel';
+      if (pInput) pInput.value = 'Anshel2026.';
+    });
+  }
+
+  // Submit login handler
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value.trim();
+
+      const isValid = VALID_CREDS.some(c => 
+        c.user.toLowerCase() === u.toLowerCase() && c.pass === p
+      );
+
+      if (isValid) {
+        if (errorAlert) errorAlert.style.display = 'none';
+        const sessionPayload = { isAuth: true, username: u, time: Date.now() };
+        sessionStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
+        localStorage.setItem(AUTH_KEY, JSON.stringify(sessionPayload));
+        
+        updateHeaderUser(u);
+        if (overlay) overlay.classList.add('hidden');
+        showToast(`Selamat datang, ${u}! 👋`, 'success');
+      } else {
+        if (errorAlert) {
+          errorAlert.textContent = '❌ Username atau Password salah!';
+          errorAlert.style.display = 'block';
+        }
+      }
+    });
+  }
+
+  // Logout handler
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(AUTH_KEY);
+      if (overlay) overlay.classList.remove('hidden');
+      document.getElementById('login-password').value = '';
+      showToast('Berhasil keluar dari sistem', 'info');
+    });
+  }
+}
+
+function updateHeaderUser(name) {
+  const badgeName = document.querySelector('#header-user-badge .user-name');
+  const badgeAvatar = document.querySelector('#header-user-badge .user-avatar');
+  if (badgeName) badgeName.textContent = name;
+  if (badgeAvatar) {
+    const initials = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    badgeAvatar.textContent = initials || 'AA';
+  }
+}
+
+// Auto init auth on load
+document.addEventListener('DOMContentLoaded', () => {
+  initAuth();
+});
+

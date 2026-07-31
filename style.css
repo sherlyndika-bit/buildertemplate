@@ -434,12 +434,297 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
   .bank-acct-row { grid-template-columns: 44px 1fr 34px; }
 }
 
+
 /* ── Print ──────────────────────── */
 @media print {
   body { background: white !important; }
-  .app-header, .form-panel, .preview-toolbar { display: none !important; }
+  .app-header, .form-panel, .preview-toolbar, .login-overlay { display: none !important; }
   .app-main { display: block !important; padding: 0 !important; max-width: 100% !important; }
   .preview-panel { position: static !important; max-height: none !important; }
   .preview-wrapper { background: white !important; border: none !important; padding: 0 !important; max-height: none !important; overflow: visible !important; }
   .invoice-doc { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; }
+}
+
+/* ═══ LOGIN OVERLAY STYLES ═══ */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.login-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  animation: loginSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1E3A8A, #3B82F6, #D97706);
+}
+
+@keyframes loginSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.login-logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1E3A8A, #2563EB);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.login-title-group h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.login-subtitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #D97706;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.login-welcome-msg {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-error-alert {
+  padding: 10px 14px;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 8px;
+  color: #991B1B;
+  font-size: 12.5px;
+  font-weight: 600;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.login-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 12px;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: #0F172A;
+  transition: all 0.2s;
+  background: #F8FAFC;
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  background: white;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.btn-login-submit {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #1E3A8A, #2563EB);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  margin-top: 6px;
+}
+
+.btn-login-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+.btn-login-submit:active {
+  transform: translateY(0);
+}
+
+.login-footer-hint {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #F1F5F9;
+  font-size: 12px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-fill-hint {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-fill-hint:hover {
+  background: #E2E8F0;
+  border-color: #CBD5E1;
+}
+
+.btn-fill-hint code {
+  font-family: inherit;
+  font-weight: 700;
+  color: #1E3A8A;
+}
+
+/* User Profile Badge in Header */
+.header-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-right: 4px;
+}
+
+.user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1E3A8A;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══ LUXURY ACCENT ENHANCEMENTS FOR DOCUMENTS ═══ */
+.invoice-doc {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  position: relative;
+}
+
+/* Metallic gold accent border right under top header stripe */
+.inv-header-band::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #1E3A8A 0%, #D97706 50%, #1E3A8A 100%);
+  margin-top: 18px;
+}
+
+/* Subtle luxury watermark stamp border */
+.doc-status-stamp {
+  letter-spacing: 0.15em !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Sleek Table Header */
+.inv-table th {
+  background: #F8FAFC !important;
+  color: #334155 !important;
+  font-weight: 800 !important;
+  border-bottom: 2px solid #E2E8F0 !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Luxury card hover effect for bank options */
+.inv-bank-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.inv-bank-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
