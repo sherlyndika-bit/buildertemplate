@@ -42,6 +42,8 @@ const BANK_DATA = {
 let currentDocType  = 'invoice';
 let logoDataUrl     = null;
 let docStatus       = '';
+let dpEnabled       = false;
+let dpPercent       = 50;
 let items           = [{ id: uid(), desc: '', qty: 1, price: 0 }];
 let bankAccounts    = [{ id: uid(), bankCode: 'BCA', customName: '', logoUrl: null, accountNumber: '', accountName: '' }];
 let scopeItems      = [{ id: uid(), text: '' }];
@@ -115,7 +117,25 @@ function calculate() {
   const afterDisc   = subtotal - discountAmt;
   const taxAmt      = afterDisc * taxPct / 100;
   const total       = afterDisc + taxAmt;
-  return { subtotal, discountPct, discountAmt, taxPct, taxAmt, total };
+  const dpPct       = dpEnabled ? Math.min(Math.max(parseMoney(val('dp-percent')), 1), 99) : 0;
+  const dpAmt       = dpEnabled ? total * dpPct / 100 : 0;
+  const pelAmt      = dpEnabled ? total - dpAmt : 0;
+  const pelPct      = dpEnabled ? 100 - dpPct : 0;
+  return { subtotal, discountPct, discountAmt, taxPct, taxAmt, total, dpPct, dpAmt, pelPct, pelAmt };
+}
+
+function updateDpDisplay() {
+  const { total, dpPct, dpAmt, pelPct, pelAmt } = calculate();
+  const pctLbl  = document.getElementById('dp-pct-label');
+  const pelLbl  = document.getElementById('pel-pct-label');
+  const dpDisp  = document.getElementById('dp-amount-display');
+  const pelDisp = document.getElementById('pel-amount-display');
+  const pelPctEl= document.getElementById('pel-percent-display');
+  if (pctLbl)  pctLbl.textContent  = dpPct;
+  if (pelLbl)  pelLbl.textContent  = pelPct;
+  if (dpDisp)  dpDisp.textContent  = fmtMoney(dpAmt);
+  if (pelDisp) pelDisp.textContent = fmtMoney(pelAmt);
+  if (pelPctEl) pelPctEl.value = pelPct;
 }
 
 /* ── Terbilang (Indonesian amount in words) ── */
@@ -184,6 +204,19 @@ function bindEvents() {
     document.getElementById('invoice-number').value = generateDocNumber(currentDocType);
     renderPreview();
     showToast('Nomor dokumen baru digenerate ✓', 'success');
+  });
+
+  // DP toggle
+  document.getElementById('enable-dp').addEventListener('change', e => {
+    dpEnabled = e.target.checked;
+    document.getElementById('dp-section-fields').style.display = dpEnabled ? '' : 'none';
+    updateDpDisplay();
+    renderPreview();
+  });
+  document.getElementById('dp-percent').addEventListener('input', e => {
+    dpPercent = Math.min(Math.max(parseInt(e.target.value)||50, 1), 99);
+    updateDpDisplay();
+    renderPreview();
   });
 
   // Status selector
@@ -564,6 +597,7 @@ function renderAllLists() {
 ═══════════════════════════════════════════════ */
 function renderPreview() {
   const el = document.getElementById('invoice-preview'); if (!el) return;
+  updateDpDisplay();
   const renderers = { invoice: renderInvoicePreview, penawaran: renderPenawaranPreview, proposal: renderProposalPreview, spk: renderSPKPreview };
   el.innerHTML = (renderers[currentDocType] || renderers.invoice)();
 }
@@ -614,19 +648,52 @@ function itemsTableHtml() {
 }
 
 function summaryBlockHtml() {
-  const { subtotal, discountPct, discountAmt, taxPct, taxAmt, total } = calculate();
+  const { subtotal, discountPct, discountAmt, taxPct, taxAmt, total, dpPct, dpAmt, pelPct, pelAmt } = calculate();
   const cur = getCurrency();
   let rows = `<div class="inv-sum-row"><span class="inv-sum-label">Subtotal</span><span class="inv-sum-value">${fmtMoney(subtotal,cur)}</span></div>`;
   if (discountPct > 0) rows += `<div class="inv-sum-row discount"><span class="inv-sum-label">Diskon (${discountPct}%)</span><span class="inv-sum-value">– ${fmtMoney(discountAmt,cur)}</span></div>`;
   if (taxPct > 0)      rows += `<div class="inv-sum-row tax"><span class="inv-sum-label">PPN (${taxPct}%)</span><span class="inv-sum-value">${fmtMoney(taxAmt,cur)}</span></div>`;
   rows += `<div class="inv-sum-row total"><span class="inv-sum-label">TOTAL</span><span class="inv-sum-value">${fmtMoney(total,cur)}</span></div>`;
+
+  // DP + Pelunasan rows
+  if (dpEnabled && dpAmt > 0) {
+    rows += `
+    <div style="height:6px"></div>
+    <div class="inv-sum-row" style="background:#EDF2FF;border-radius:6px 6px 0 0;">
+      <span class="inv-sum-label" style="color:#3B5BDB;font-weight:700;">
+        <span style="display:inline-block;background:#3B5BDB;color:white;font-size:9px;font-weight:900;padding:1px 6px;border-radius:99px;margin-right:5px;letter-spacing:.04em">DP</span>
+        Down Payment (${dpPct}%)
+      </span>
+      <span class="inv-sum-value" style="color:#3B5BDB">${fmtMoney(dpAmt,cur)}</span>
+    </div>
+    <div class="inv-sum-row" style="background:#E6FCF5;border-radius:0 0 6px 6px;">
+      <span class="inv-sum-label" style="color:#0CA678;font-weight:700;">
+        <span style="display:inline-block;background:#0CA678;color:white;font-size:9px;font-weight:900;padding:1px 6px;border-radius:99px;margin-right:5px;letter-spacing:.04em">PLS</span>
+        Pelunasan (${pelPct}%)
+      </span>
+      <span class="inv-sum-value" style="color:#0CA678">${fmtMoney(pelAmt,cur)}</span>
+    </div>`;
+  }
+
   return `<div class="inv-summary-area"><div class="inv-summary-box">${rows}</div></div>`;
 }
 
 function terbilangBlockHtml() {
-  const { total } = calculate();
+  const { total, dpEnabled: _dp, dpAmt, pelAmt, dpPct, pelPct } = calculate();
   if (total <= 0 || getCurrency() !== 'IDR') return '';
-  return `<div class="inv-terbilang"><div class="inv-terbilang-text">Terbilang: <em>${terbilangRupiah(total)}</em></div></div>`;
+  let html = `<div class="inv-terbilang">`;
+  if (dpEnabled && dpAmt > 0) {
+    html += `<div class="inv-terbilang-text" style="margin-bottom:4px">
+      <strong style="color:#3B5BDB">DP (${dpPct}%):</strong> <em>${terbilangRupiah(dpAmt)}</em>
+    </div>
+    <div class="inv-terbilang-text">
+      <strong style="color:#0CA678">Pelunasan (${pelPct}%):</strong> <em>${terbilangRupiah(pelAmt)}</em>
+    </div>`;
+  } else {
+    html += `<div class="inv-terbilang-text">Terbilang: <em>${terbilangRupiah(total)}</em></div>`;
+  }
+  html += `</div>`;
+  return html;
 }
 
 function statusStampHtml() {
@@ -957,6 +1024,14 @@ function resetForm() {
   ].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
 
   docStatus = '';
+  dpEnabled = false;
+  const enableDpEl = document.getElementById('enable-dp');
+  if (enableDpEl) enableDpEl.checked = false;
+  const dpSectionEl = document.getElementById('dp-section-fields');
+  if (dpSectionEl) dpSectionEl.style.display = 'none';
+  const dpPercentEl = document.getElementById('dp-percent');
+  if (dpPercentEl) dpPercentEl.value = 50;
+
   document.querySelectorAll('#status-selector .status-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('#status-selector .status-btn').classList.add('active');
 

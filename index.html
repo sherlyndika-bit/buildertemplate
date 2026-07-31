@@ -320,6 +320,49 @@
                 <span class="suffix">%</span>
               </div>
             </div>
+            <!-- DP + Pelunasan -->
+            <div class="form-group full-width">
+              <label class="toggle-switch-label" for="enable-dp">
+                <input type="checkbox" id="enable-dp" />
+                <span class="toggle-switch-track"></span>
+                <span class="toggle-switch-text">Pembayaran Bertahap (DP + Pelunasan)</span>
+              </label>
+            </div>
+            <div id="dp-section-fields" style="display:none;" class="full-width dp-section-inner">
+              <div class="dp-percent-row">
+                <div class="form-group">
+                  <label for="dp-percent">DP (%)</label>
+                  <div class="input-suffix">
+                    <input type="number" id="dp-percent" value="50" min="1" max="99" step="5" />
+                    <span class="suffix">%</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Sisa Pelunasan</label>
+                  <div class="input-suffix">
+                    <input type="number" id="pel-percent-display" value="50" min="1" max="99" readonly style="background:#F5F6FA;color:#8B93A9;cursor:not-allowed;" />
+                    <span class="suffix">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="dp-info-card">
+                <div class="dp-info-row">
+                  <div class="dp-info-left">
+                    <span class="dp-badge dp-badge-blue">DP</span>
+                    <span class="dp-info-label">Down Payment (<span id="dp-pct-label">50</span>%)</span>
+                  </div>
+                  <span class="dp-info-value" id="dp-amount-display">Rp 0</span>
+                </div>
+                <div class="dp-info-divider"></div>
+                <div class="dp-info-row">
+                  <div class="dp-info-left">
+                    <span class="dp-badge dp-badge-green">PLS</span>
+                    <span class="dp-info-label">Pelunasan (<span id="pel-pct-label">50</span>%)</span>
+                  </div>
+                  <span class="dp-info-value" id="pel-amount-display">Rp 0</span>
+                </div>
+              </div>
+            </div>
             <div class="form-group full-width">
               <label for="notes">Catatan Tambahan</label>
               <textarea id="notes" rows="3" placeholder="Terima kasih atas kepercayaan Anda..."></textarea>
