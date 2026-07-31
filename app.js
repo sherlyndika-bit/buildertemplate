@@ -1678,6 +1678,70 @@ function initHistorySystem() {
   });
 
   updateHistoryCountBadge();
+
+  // Bind Backup & Restore
+  const btnBackupDB = document.getElementById('btn-backup-db');
+  const btnRestoreDB = document.getElementById('btn-restore-db');
+  const fileRestoreDB = document.getElementById('file-restore-db');
+
+  if (btnBackupDB) {
+    btnBackupDB.addEventListener('click', backupDatabase);
+  }
+  if (btnRestoreDB && fileRestoreDB) {
+    btnRestoreDB.addEventListener('click', () => fileRestoreDB.click());
+    fileRestoreDB.addEventListener('change', restoreDatabase);
+  }
+}
+
+// ═══ OFFLINE DATABASE BACKUP & RESTORE ═══
+function backupDatabase() {
+  const dbData = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    dbData[key] = localStorage.getItem(key);
+  }
+  const jsonStr = JSON.stringify(dbData, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `anshel_database_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  
+  URL.revokeObjectURL(url);
+  showToast('Database berhasil dibackup ke file JSON!', 'success');
+}
+
+function restoreDatabase(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const dbData = JSON.parse(e.target.result);
+      if (typeof dbData !== 'object' || dbData === null) throw new Error('Format JSON salah');
+      
+      if (!confirm('PERINGATAN: Me-restore database akan menimpa seluruh riwayat dan data draft Anda saat ini. Lanjutkan?')) {
+        event.target.value = '';
+        return;
+      }
+      
+      // Merge/Overwrite all keys from backup to localStorage
+      for (const key in dbData) {
+        localStorage.setItem(key, dbData[key]);
+      }
+      
+      showToast('Database berhasil dipulihkan! Memuat ulang sistem...', 'success');
+      setTimeout(() => location.reload(), 1500);
+      
+    } catch (err) {
+      showToast('Gagal membaca file backup. Pastikan file JSON valid.', 'error');
+      event.target.value = '';
+    }
+  };
+  reader.readAsText(file);
 }
 
 /* ═══════════════════════════════════════════════
