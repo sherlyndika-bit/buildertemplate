@@ -783,7 +783,9 @@ function renderInvoicePreview() {
   <div class="inv-signature-area">
     <div class="inv-sign-left">Dokumen ini dibuat secara elektronik dan sah tanpa tanda tangan basah.</div>
     <div class="inv-sign-right">
-      <div class="inv-sign-box"></div>
+      <div class="inv-sign-box">
+        <div class="inv-sign-img-wrap"><img src="default-signature.png" alt="Tanda Tangan" /></div>
+      </div>
       <div class="inv-sign-name">${sigName || esc(val('sender-name')) || '_______________'}</div>
       <div class="inv-sign-title">${sigTitle || 'Hormat Kami'}</div>
     </div>
@@ -838,7 +840,9 @@ function renderPenawaranPreview() {
   <div class="inv-signature-area">
     <div class="inv-sign-left">Penawaran ini berlaku sesuai tanggal yang tertera. Untuk konfirmasi, hubungi kami.</div>
     <div class="inv-sign-right">
-      <div class="inv-sign-box"></div>
+      <div class="inv-sign-box">
+        <div class="inv-sign-img-wrap"><img src="default-signature.png" alt="Tanda Tangan" /></div>
+      </div>
       <div class="inv-sign-name">${sigName || esc(val('sender-name')) || '_______________'}</div>
       <div class="inv-sign-title">${sigTitle || 'Hormat Kami'}</div>
     </div>
@@ -921,6 +925,7 @@ function renderProposalPreview() {
       <div class="prop-sign-role">Pihak Pengaju</div>
       <div class="prop-sign-party">${esc(val('sender-name'))||'Pengirim'}</div>
       <div class="prop-sign-line">
+        <div class="inv-sign-img-wrap" style="margin-bottom:4px;"><img src="default-signature.png" alt="Tanda Tangan" /></div>
         <div class="prop-sign-name">${sigName || esc(val('sender-name')) || '( ___________________ )'}</div>
         ${sigTitle ? `<div class="prop-sign-title">${sigTitle}</div>` : ''}
       </div>
@@ -1010,6 +1015,7 @@ function renderSPKPreview() {
       <div class="spk-sign-role">Pihak Pertama</div>
       <div class="spk-sign-party">${esc(val('sender-name'))||'Pemberi Kerja'}</div>
       <div class="spk-sign-line">
+        <div class="inv-sign-img-wrap" style="margin-bottom:4px;"><img src="default-signature.png" alt="Tanda Tangan" /></div>
         <div class="spk-sign-name">${sigName || esc(val('sender-name')).substring(0,22) || '( _______________ )'}</div>
         ${sigTitle ? `<div class="spk-sign-title">${sigTitle}</div>` : ''}
       </div>
