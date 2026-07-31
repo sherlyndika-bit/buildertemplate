@@ -1121,7 +1121,7 @@ function renderSPKPreview() {
 }
 
 /* ═══════════════════════════════════════════════
-   EXPORT PDF (DIRECT DOM CAPTURE - GUARANTEED NON-BLANK & UN-CROPPED)
+   EXPORT PDF (PIXEL-PERFECT 100% UN-CROPPED A4)
 ═══════════════════════════════════════════════ */
 function exportPDF() {
   showToast('Menyiapkan PDF...', 'info');
@@ -1146,11 +1146,12 @@ function exportPDF() {
   el.style.transform = 'none';
   el.style.boxShadow = 'none';
   el.style.margin = '0 auto';
+  el.style.paddingRight = '24px'; // Extra safety buffer on right edge to guarantee zero clipping of document numbers
 
   const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
 
   const opt = {
-    margin: [6, 6, 6, 6],
+    margin: 0, // Zero outer PDF margins so 794px maps 1-to-1 to 210mm A4 width
     filename: filename,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { 
@@ -1158,7 +1159,9 @@ function exportPDF() {
       useCORS: true, 
       logging: false,
       scrollX: 0,
-      scrollY: 0
+      scrollY: 0,
+      width: 794,
+      windowWidth: 794
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
