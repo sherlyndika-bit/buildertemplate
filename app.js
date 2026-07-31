@@ -318,21 +318,40 @@ function handleLogoUpload(e) {
   const reader = new FileReader();
   reader.onload = ev => {
     logoDataUrl = ev.target.result;
-    document.getElementById('logo-preview').src = logoDataUrl;
-    document.getElementById('logo-preview').hidden = false;
-    document.getElementById('logo-placeholder').style.display = 'none';
-    document.getElementById('logo-remove-btn').hidden = false;
+    const prev = document.getElementById('logo-preview');
+    if (prev) {
+      prev.src = logoDataUrl;
+      prev.hidden = false;
+      prev.style.display = 'block';
+    }
+    const placeholder = document.getElementById('logo-placeholder');
+    if (placeholder) placeholder.style.display = 'none';
+    const removeBtn = document.getElementById('logo-remove-btn');
+    if (removeBtn) {
+      removeBtn.hidden = false;
+      removeBtn.style.display = 'inline-flex';
+    }
     renderPreview();
   };
   reader.readAsDataURL(file);
 }
 
 function removeLogo() {
-  logoDataUrl = null;
+  logoDataUrl = 'anshel-logo.png';
   document.getElementById('logo-input').value = '';
-  document.getElementById('logo-preview').hidden = true;
-  document.getElementById('logo-placeholder').style.display = '';
-  document.getElementById('logo-remove-btn').hidden = true;
+  const prev = document.getElementById('logo-preview');
+  if (prev) {
+    prev.hidden = true;
+    prev.style.display = 'none';
+    prev.removeAttribute('src');
+  }
+  const placeholder = document.getElementById('logo-placeholder');
+  if (placeholder) placeholder.style.display = '';
+  const removeBtn = document.getElementById('logo-remove-btn');
+  if (removeBtn) {
+    removeBtn.hidden = true;
+    removeBtn.style.display = 'none';
+  }
   renderPreview();
 }
 
