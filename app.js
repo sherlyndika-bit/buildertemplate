@@ -1121,65 +1121,66 @@ function renderSPKPreview() {
 }
 
 /* ═══════════════════════════════════════════════
-   EXPORT PDF (OFFSCREEN CLONE - GUARANTEED NON-BLANK ON MOBILE & DESKTOP)
+   EXPORT PDF (DIRECT DOM CAPTURE - GUARANTEED NON-BLANK & UN-CROPPED)
 ═══════════════════════════════════════════════ */
 function exportPDF() {
   showToast('Menyiapkan PDF...', 'info');
   
-  const originalPreview = document.getElementById('invoice-preview');
-  if (!originalPreview) {
+  const el = document.getElementById('invoice-preview');
+  if (!el) {
     showToast('Gagal menemukan preview dokumen', 'error');
     return;
   }
 
-  // Create a temporary offscreen 800px A4 container for html2canvas
-  const cloneWrapper = document.createElement('div');
-  cloneWrapper.style.position = 'absolute';
-  cloneWrapper.style.left = '-9999px';
-  cloneWrapper.style.top = '0';
-  cloneWrapper.style.width = '800px';
-  cloneWrapper.style.background = '#FFFFFF';
-  cloneWrapper.style.zIndex = '-9999';
+  // Save current mobile view state and inline styles
+  const isMobileForm = document.body.classList.contains('mobile-view-form');
+  if (isMobileForm) {
+    document.body.classList.remove('mobile-view-form');
+    document.body.classList.add('mobile-view-preview');
+  }
 
-  const clone = originalPreview.cloneNode(true);
-  clone.style.display = 'block';
-  clone.style.visibility = 'visible';
-  clone.style.width = '800px';
-  clone.style.maxWidth = '800px';
-  clone.style.minWidth = '800px';
-  clone.style.transform = 'none';
-  clone.style.boxShadow = 'none';
-  clone.style.margin = '0';
-  clone.style.padding = '36px 40px';
-
-  cloneWrapper.appendChild(clone);
-  document.body.appendChild(cloneWrapper);
+  const savedStyle = el.getAttribute('style') || '';
+  el.style.width = '794px';
+  el.style.maxWidth = '794px';
+  el.style.minWidth = '794px';
+  el.style.transform = 'none';
+  el.style.boxShadow = 'none';
+  el.style.margin = '0 auto';
 
   const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
 
   const opt = {
-    margin: [8, 8, 8, 8],
+    margin: [6, 6, 6, 6],
     filename: filename,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { 
       scale: 2, 
       useCORS: true, 
       logging: false,
-      width: 800,
-      windowWidth: 800
+      scrollX: 0,
+      scrollY: 0
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
-  html2pdf().set(opt).from(clone).save()
+  html2pdf().set(opt).from(el).save()
     .then(() => {
-      if (document.body.contains(cloneWrapper)) document.body.removeChild(cloneWrapper);
+      // Restore styles and view state
+      el.setAttribute('style', savedStyle);
+      if (isMobileForm) {
+        document.body.classList.remove('mobile-view-preview');
+        document.body.classList.add('mobile-view-form');
+      }
       showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success');
       saveCurrentDocument('pdf_export');
     })
     .catch((err) => {
-      if (document.body.contains(cloneWrapper)) document.body.removeChild(cloneWrapper);
+      el.setAttribute('style', savedStyle);
+      if (isMobileForm) {
+        document.body.classList.remove('mobile-view-preview');
+        document.body.classList.add('mobile-view-form');
+      }
       console.error('PDF export error:', err);
       showToast('Gagal membuat PDF. Coba gunakan tombol Cetak -> Save as PDF', 'error');
     });
