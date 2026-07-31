@@ -261,8 +261,8 @@ function bindEvents() {
   document.getElementById('btn-reset').addEventListener('click', resetForm);
   document.getElementById('btn-pdf').addEventListener('click', exportPDF);
   document.getElementById('btn-pdf-sm').addEventListener('click', exportPDF);
-  document.getElementById('btn-print').addEventListener('click', () => window.print());
-  document.getElementById('btn-print-sm').addEventListener('click', () => window.print());
+  document.getElementById('btn-print').addEventListener('click', exportPDF);
+  document.getElementById('btn-print-sm').addEventListener('click', exportPDF);
 
   // Live update
   document.querySelector('.form-panel').addEventListener('input', renderPreview);
