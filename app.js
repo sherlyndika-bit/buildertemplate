@@ -349,12 +349,16 @@ function renderBankAccountsList() {
     ).join('');
 
     const logoContent = acct.logoUrl
-      ? `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;" />`
-      : `<div class="inv-bank-logo-text" style="font-size:8px;font-weight:900;color:${bank.text}">${bank.short}</div>`;
+      ? `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;padding:2px;" />`
+      : `<div class="inv-bank-logo-text" style="font-size:9px;font-weight:900;color:${bank.color}">${bank.short}</div>`;
+
+    const badgeStyle = acct.logoUrl
+      ? 'background:#FFFFFF; border:1px solid #E2E8F0;'
+      : `background:#FFFFFF; border:1.5px solid ${bank.color}40;`;
 
     row.innerHTML = `
       <div class="bank-acct-logo-cell">
-        <div class="bank-badge-preview" style="background:${bank.color};" id="badge-${acct.id}">
+        <div class="bank-badge-preview" style="${badgeStyle}" id="badge-${acct.id}">
           ${logoContent}
         </div>
         <input type="file" class="bank-logo-input" accept="image/*" data-id="${acct.id}" />
@@ -386,8 +390,9 @@ function renderBankAccountsList() {
       const bankDef = BANK_DATA[e.target.value] || BANK_DATA.CUSTOM;
       const badge = document.getElementById('badge-' + acct.id);
       if (badge) {
-        badge.style.background = bankDef.color;
-        badge.innerHTML = `<div class="inv-bank-logo-text" style="font-size:8px;font-weight:900;color:${bankDef.text}">${bankDef.short}</div>`;
+        badge.style.background = '#FFFFFF';
+        badge.style.border = `1.5px solid ${bankDef.color}40`;
+        badge.innerHTML = `<div class="inv-bank-logo-text" style="font-size:9px;font-weight:900;color:${bankDef.color}">${bankDef.short}</div>`;
       }
       renderPreview();
     });
@@ -425,7 +430,11 @@ function renderBankAccountsList() {
         if (!acct) return;
         acct.logoUrl = ev.target.result;
         const badge = document.getElementById('badge-' + acct.id);
-        if (badge) badge.innerHTML = `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;" />`;
+        if (badge) {
+          badge.style.background = '#FFFFFF';
+          badge.style.border = '1px solid #E2E8F0';
+          badge.innerHTML = `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;padding:2px;" />`;
+        }
         renderPreview();
         showToast('Logo bank berhasil diupload ✓', 'success');
       };
@@ -449,11 +458,17 @@ function bankCardsHtml() {
     if (!acct.accountNumber && !acct.accountName) return;
     const bank = BANK_DATA[acct.bankCode] || BANK_DATA.CUSTOM;
     const bankName = acct.bankCode === 'CUSTOM' ? (acct.customName || 'Bank Lainnya') : bank.name;
+    
     const logoContent = acct.logoUrl
-      ? `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;padding:2px;" />`
-      : `<div class="inv-bank-logo-text" style="color:${bank.text}">${bank.short}</div>`;
+      ? `<img src="${acct.logoUrl}" style="width:100%;height:100%;object-fit:contain;padding:4px;" />`
+      : `<div class="inv-bank-logo-text" style="color:${bank.color}; font-size:10.5px; font-weight:900;">${bank.short}</div>`;
+    
+    const containerStyle = acct.logoUrl
+      ? 'background: #FFFFFF; border: 1px solid #E2E8F0;'
+      : `background: #FFFFFF; border: 1.5px solid ${bank.color}40;`;
+
     html += `<div class="inv-bank-card">
-      <div class="inv-bank-logo" style="background:${bank.color}">${logoContent}</div>
+      <div class="inv-bank-logo" style="${containerStyle}">${logoContent}</div>
       <div>
         <div class="inv-bank-name">${esc(bankName)}</div>
         <div class="inv-bank-number">${esc(acct.accountNumber) || '–'}</div>
