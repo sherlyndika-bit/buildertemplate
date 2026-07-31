@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DocPro Internal | Invoice · Proposal · Penawaran · Surat Perjanjian Kerjasama (SPK)</title>
   <meta name="description" content="Sistem pembuatan dokumen internal profesional: Invoice, Proposal, Surat Penawaran, dan Surat Perjanjian Kerjasama (SPK)." />
+  <meta name="theme-color" content="#1E3A8A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DocPro" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -88,6 +95,10 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Keluar
         </button>
+        <button class="btn btn-outline" id="btn-pwa-install" style="display:none;" title="Install Aplikasi HP">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Install App
+        </button>
         <button class="btn btn-ghost" id="btn-reset">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.05"/></svg>
           Reset
@@ -103,6 +114,18 @@
       </div>
     </div>
   </header>
+
+  <!-- ═══ MOBILE VIEW SWITCHER (Form vs Preview) ═══ -->
+  <div class="mobile-view-tabs" id="mobile-view-tabs">
+    <button class="mobile-tab-btn active" id="btn-show-form">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Form Isian
+    </button>
+    <button class="mobile-tab-btn" id="btn-show-preview">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Preview Hasil
+    </button>
+  </div>
 
   <!-- ═══ MAIN ═══ -->
   <main class="app-main">
@@ -591,6 +614,22 @@
     </section>
 
   </main>
+
+  <!-- ═══ MOBILE STICKY FLOATING ACTION BAR ═══ -->
+  <div class="mobile-sticky-bar" id="mobile-sticky-bar">
+    <button class="mobile-bar-btn btn-ghost" id="mobile-btn-reset">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.05"/></svg>
+      Reset
+    </button>
+    <button class="mobile-bar-btn btn-outline" id="mobile-btn-print">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Cetak
+    </button>
+    <button class="mobile-bar-btn btn-primary" id="mobile-btn-pdf">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download PDF
+    </button>
+  </div>
 
   <div class="toast" id="toast"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>

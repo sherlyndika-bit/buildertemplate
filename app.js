@@ -1164,8 +1164,79 @@ function updateHeaderUser(name) {
   }
 }
 
-// Auto init auth on load
+/* ═══════════════════════════════════════════════
+   MOBILE VIEW SWITCHER & PWA REGISTER
+═══════════════════════════════════════════════ */
+function initMobileAndPWA() {
+  // Mobile View Switcher (Form vs Preview)
+  const btnForm = document.getElementById('btn-show-form');
+  const btnPreview = document.getElementById('btn-show-preview');
+
+  document.body.classList.add('mobile-view-form');
+
+  if (btnForm && btnPreview) {
+    btnForm.addEventListener('click', () => {
+      document.body.classList.remove('mobile-view-preview');
+      document.body.classList.add('mobile-view-form');
+      btnForm.classList.add('active');
+      btnPreview.classList.remove('active');
+    });
+
+    btnPreview.addEventListener('click', () => {
+      document.body.classList.remove('mobile-view-form');
+      document.body.classList.add('mobile-view-preview');
+      btnPreview.classList.add('active');
+      btnForm.classList.remove('active');
+    });
+  }
+
+  // Mobile Sticky Bar Button Event Bindings
+  const mobReset = document.getElementById('mobile-btn-reset');
+  const mobPrint = document.getElementById('mobile-btn-print');
+  const mobPdf   = document.getElementById('mobile-btn-pdf');
+
+  if (mobReset) mobReset.addEventListener('click', resetForm);
+  if (mobPrint) mobPrint.addEventListener('click', () => window.print());
+  if (mobPdf)   mobPdf.addEventListener('click', exportPDF);
+
+  // Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('PWA ServiceWorker ready:', reg.scope))
+        .catch(err => console.log('PWA ServiceWorker error:', err));
+    });
+  }
+
+  // PWA Install Prompt Listener
+  let deferredPrompt;
+  const installBtn = document.getElementById('btn-pwa-install');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'inline-flex';
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            showToast('Aplikasi DocPro berhasil diinstall! 📱', 'success');
+          }
+          deferredPrompt = null;
+          installBtn.style.display = 'none';
+        });
+      }
+    });
+  }
+}
+
+// Auto init auth & mobile PWA on load
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
+  initMobileAndPWA();
 });
 
