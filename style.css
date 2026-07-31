@@ -408,27 +408,183 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
 .toast.error   { background: #E03131; }
 .toast.info    { background: #3B5BDB; }
 
-/* ── Responsive ─────────────────── */
+/* ── Responsive & Mobile Design Overhaul ─────────────────── */
 @media (max-width: 1200px) {
   .app-main { grid-template-columns: 1fr; }
   .preview-panel { position: static; max-height: none; }
-  .preview-wrapper { max-height: 900px; }
+  .preview-wrapper { max-height: none; }
 }
+
+@media (max-width: 900px) {
+  .mobile-view-tabs { display: flex; }
+  .mobile-sticky-bar { display: flex; }
+  .app-main { padding: 10px 10px 84px !important; }
+
+  /* Mobile View Toggling */
+  body.mobile-view-preview .form-panel { display: none !important; }
+  body.mobile-view-form .preview-panel { display: none !important; }
+  body.mobile-view-preview .preview-panel { display: block !important; }
+}
+
 @media (max-width: 768px) {
-  .app-main { padding: 12px; }
-  .form-section { padding: 14px; }
-  .header-inner { padding: 0 14px; }
-  .brand-badge, .btn-ghost { display: none; }
-  .doc-type-btn { font-size: 11px; padding: 8px 4px; gap: 3px; }
-  .items-header-row, .item-row { grid-template-columns: 1fr 50px 34px; }
-  .col-price, .col-sub, .item-subtotal { display: none; }
-  .inv-header-band, .inv-meta-band, .inv-items-area, .inv-summary-area, .inv-terbilang, .inv-bank-section, .inv-footer-info, .inv-signature-area { padding-left: 20px; padding-right: 20px; }
-  .spk-parties, .spk-pasal, .spk-sign-area { padding-left: 20px; padding-right: 20px; }
-  .prop-kop, .prop-body, .prop-sign-area { padding-left: 20px; padding-right: 20px; }
-  .prop-to-section, .prop-closing-box { margin-left: 20px; margin-right: 20px; }
-  .spk-parties, .spk-sign-area, .prop-sign-area { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
-  .bank-acct-row { grid-template-columns: 44px 1fr 34px; }
+  /* Header Mobile Optimization */
+  .app-header { height: auto; padding: 10px 14px; }
+  .header-inner { flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+  .header-brand { gap: 8px; }
+  .brand-name { font-size: 15px; }
+  .brand-badge { display: none; }
+  .header-user-badge { padding: 4px 8px; font-size: 11px; }
+  .user-name { display: none; }
+  
+  /* Hide non-essential desktop header buttons on mobile */
+  .header-actions #btn-reset,
+  .header-actions #btn-print,
+  .header-actions #btn-pdf {
+    display: none !important;
+  }
+  .header-actions { gap: 4px; }
+  .header-actions .btn { padding: 6px 10px; font-size: 11.5px; }
+
+  /* Doc Type Tabs Switcher (Scrollable Pills on Mobile) */
+  .doc-type-tabs {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding: 4px 2px 8px;
+    margin-bottom: 12px;
+  }
+  .doc-type-btn {
+    flex: 0 0 auto;
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 20px;
+  }
+
+  /* Form Panels & Inputs */
+  .form-section { padding: 14px 12px !important; border-radius: 12px; }
+  .form-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .form-group input, .form-group select, .form-group textarea {
+    font-size: 14px !important; /* Prevents iOS auto-zoom */
+    padding: 10px 12px !important;
+  }
+
+  /* Items Table -> Mobile Touch Cards */
+  .items-header-row { display: none !important; }
+  .item-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 36px !important;
+    gap: 8px !important;
+    background: #F8FAFC;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    margin-bottom: 8px;
+  }
+  .item-row input[name="desc"] {
+    grid-column: 1 / -1;
+    font-size: 13.5px !important;
+  }
+  .item-row input[name="qty"] {
+    grid-column: 1;
+  }
+  .item-row input[name="price"] {
+    grid-column: 2;
+  }
+  .btn-remove-item {
+    grid-column: 3;
+    align-self: center;
+    height: 36px;
+    width: 36px;
+  }
+
+  /* Bank Account Cards on Mobile */
+  .bank-acct-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: #F8FAFC;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    margin-bottom: 8px;
+  }
+  .bank-acct-row select, .bank-acct-row input {
+    width: 100% !important;
+  }
+
+  /* Scope & Timeline Cards on Mobile */
+  .scope-row, .timeline-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: #F8FAFC;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    margin-bottom: 8px;
+  }
+
+  /* Preview Document Paper Mobile Fit */
+  .preview-panel { padding: 0 !important; background: #F1F5F9 !important; }
+  .preview-toolbar { padding: 10px 12px !important; }
+  .preview-wrapper {
+    padding: 8px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    justify-content: center !important;
+    background: #CBD5E1 !important;
+  }
+  .inv-paper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 20px 12px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  }
+
+  /* Inner document padding for mobile screens */
+  .inv-header-band, .inv-meta-band, .inv-items-area, 
+  .inv-summary-area, .inv-terbilang, .inv-bank-section, 
+  .inv-footer-info, .inv-signature-area, .spk-parties, 
+  .spk-pasal, .spk-sign-area, .prop-kop, .prop-body, 
+  .prop-sign-area {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .prop-to-section, .prop-closing-box {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+
+  /* History Modal Mobile Fit */
+  .history-modal-card {
+    width: 94vw !important;
+    max-height: 88vh !important;
+    border-radius: 12px !important;
+  }
+  .history-modal-header {
+    padding: 14px 16px !important;
+  }
+  .history-controls {
+    padding: 10px 14px !important;
+  }
+  .history-list-container {
+    padding: 12px 14px !important;
+  }
+  .history-doc-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  .history-doc-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
 }
 
 /* ═══ MOBILE VIEW SWITCHER & STICKY BAR ═══ */
@@ -474,14 +630,14 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid var(--color-border);
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding: 10px 14px;
   z-index: 999;
-  gap: 10px;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+  gap: 8px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .mobile-bar-btn {
@@ -491,20 +647,20 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
   justify-content: center;
   gap: 6px;
   padding: 10px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   border-radius: 8px;
+  font-family: inherit;
 }
-
-@media (max-width: 900px) {
-  .mobile-view-tabs { display: flex; }
-  .mobile-sticky-bar { display: flex; }
-  .app-main { padding-bottom: 76px; }
-
-  /* Mobile View Toggling */
-  body.mobile-view-preview .form-panel { display: none !important; }
-  body.mobile-view-form .preview-panel { display: none !important; }
-  body.mobile-view-preview .preview-panel { display: block !important; }
+.mobile-bar-btn.btn-primary {
+  background: #2563EB;
+  color: white;
+  border: none;
+}
+.mobile-bar-btn.btn-outline {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 

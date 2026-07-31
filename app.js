@@ -1208,13 +1208,13 @@ function initMobileAndPWA() {
   }
 
   // Mobile Sticky Bar Button Event Bindings
-  const mobReset = document.getElementById('mobile-btn-reset');
-  const mobPrint = document.getElementById('mobile-btn-print');
-  const mobPdf   = document.getElementById('mobile-btn-pdf');
+  const mobHistory = document.getElementById('mobile-btn-history');
+  const mobDraft   = document.getElementById('mobile-btn-draft');
+  const mobPdf     = document.getElementById('mobile-btn-pdf');
 
-  if (mobReset) mobReset.addEventListener('click', resetForm);
-  if (mobPrint) mobPrint.addEventListener('click', () => window.print());
-  if (mobPdf)   mobPdf.addEventListener('click', exportPDF);
+  if (mobHistory) mobHistory.addEventListener('click', openHistoryModal);
+  if (mobDraft)   mobDraft.addEventListener('click', () => saveCurrentDocument('manual_draft'));
+  if (mobPdf)     mobPdf.addEventListener('click', exportPDF);
 
   // Service Worker Registration
   if ('serviceWorker' in navigator) {
