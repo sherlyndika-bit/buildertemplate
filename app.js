@@ -663,13 +663,17 @@ function senderBlockHtml(small=false) {
   const email = esc(val('sender-email'));
   const web = esc(val('sender-website'));
   const npwp = esc(val('sender-npwp'));
-  const detail = [addr, phone && `📞 ${phone}`, email && `✉ ${email}`, web && `🌐 ${web}`, npwp && `NPWP: ${npwp}`].filter(Boolean).join('<br>');
+
+  const contacts = [phone && `📞 ${phone}`, email && `✉ ${email}`, web && `🌐 ${web}`].filter(Boolean).join(' · ');
+
   return `
     <div class="inv-company-block">
       ${logoDataUrl ? `<div class="inv-company-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="inv-company-info-name">${nm}</div>
-        <div class="inv-company-info-detail">${detail}</div>
+        ${addr ? `<div class="inv-company-info-detail">${addr}</div>` : ''}
+        ${contacts ? `<div class="inv-company-info-detail">${contacts}</div>` : ''}
+        ${npwp ? `<div class="inv-company-info-detail">NPWP: ${npwp}</div>` : ''}
       </div>
     </div>`;
 }
@@ -955,7 +959,8 @@ function renderProposalPreview() {
       ${logoDataUrl ? `<div class="prop-kop-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="prop-sender-name">${esc(val('sender-name'))||'Nama Perusahaan'}</div>
-        <div class="prop-sender-detail">${[val('sender-address'),val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' · ')}</div>
+        ${val('sender-address') ? `<div class="prop-sender-detail">${esc(val('sender-address'))}</div>` : ''}
+        ${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).length ? `<div class="prop-sender-detail">${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
         ${val('sender-npwp') ? `<div class="prop-sender-detail">NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
       </div>
     </div>
@@ -1033,7 +1038,8 @@ function renderSPKPreview() {
       ${logoDataUrl ? `<div class="spk-kop-logo"><img src="${logoDataUrl}" /></div>` : ''}
       <div>
         <div class="spk-company-name">${esc(val('sender-name'))||'Nama Perusahaan'}</div>
-        <div class="spk-company-detail">${[val('sender-address'),val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' | ')}</div>
+        ${val('sender-address') ? `<div class="spk-company-detail">${esc(val('sender-address'))}</div>` : ''}
+        ${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).length ? `<div class="spk-company-detail">${[val('sender-phone'),val('sender-email'),val('sender-website')].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
         ${val('sender-npwp') ? `<div class="spk-company-detail">NPWP: ${esc(val('sender-npwp'))}</div>` : ''}
       </div>
     </div>
