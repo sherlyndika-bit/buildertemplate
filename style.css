@@ -424,6 +424,51 @@ select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ═══ TOAST NOTIFICATION STYLES ═══ */
+.toast {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 999999;
+  padding: 10px 18px;
+  background: #0F172A;
+  color: #FFFFFF;
+  border-radius: 30px;
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+  max-width: 90vw;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+  background: #059669;
+  color: #FFFFFF;
+}
+
+.toast.error {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+.toast.info {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
 .pwa-banner-inner {
   display: flex;
   align-items: center;
