@@ -1124,7 +1124,7 @@ function renderSPKPreview() {
    EXPORT PDF (DIRECT REAL DOM TARGETING - GUARANTEED SUCCESS)
 ═══════════════════════════════════════════════ */
 function exportPDF() {
-  showToast('Menyiapkan PDF...', 'info');
+  showToast('Menyiapkan dokumen vector PDF...', 'info');
 
   const el = document.getElementById('invoice-preview');
   if (!el) {
@@ -1139,63 +1139,25 @@ function exportPDF() {
     document.body.classList.add('mobile-view-preview');
   }
 
-  // Temporarily force styles to prevent html2canvas cropping
-  const originalStyle = {
-    maxWidth: el.style.maxWidth,
-    width: el.style.width,
-    overflow: el.style.overflow,
-    background: el.style.background,
-    margin: el.style.margin,
-    borderRadius: el.style.borderRadius,
-    boxShadow: el.style.boxShadow
-  };
-  
-  el.style.maxWidth = '794px';
-  el.style.width = '794px';
-  el.style.margin = '0 auto';
-  el.style.overflow = 'visible';
-  el.style.background = 'white';
-  el.style.borderRadius = '0';
-  el.style.boxShadow = 'none';
+  // Update document title temporarily so the saved PDF has the correct filename
+  const originalTitle = document.title;
+  const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}`;
+  document.title = filename;
 
-  const filename = `${DOC_LABELS[currentDocType]}-${val('invoice-number') || 'dokumen'}.pdf`;
-
-  const opt = {
-    margin: [0, 0, 0, 0],
-    filename: filename,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { 
-      scale: 2, 
-      useCORS: true, 
-      logging: false
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] }
-  };
-
-  html2pdf().set(opt).from(el).save()
-    .then(() => {
-      // Restore styles
-      Object.assign(el.style, originalStyle);
-      
-      if (isMobileForm) {
-        document.body.classList.remove('mobile-view-preview');
-        document.body.classList.add('mobile-view-form');
-      }
-      showToast(`✓ ${DOC_LABELS[currentDocType]} berhasil didownload!`, 'success');
-      saveCurrentDocument('pdf_export');
-    })
-    .catch((err) => {
-      Object.assign(el.style, originalStyle);
-      
-      if (isMobileForm) {
-        document.body.classList.remove('mobile-view-preview');
-        document.body.classList.add('mobile-view-form');
-      }
-      console.error('PDF export error:', err);
-      // Automatic fallback to native print engine
-      window.print();
-    });
+  // Use native browser print which generates true vector PDF (Selectable Text, No Photo Flattening)
+  setTimeout(() => {
+    window.print();
+    
+    // Restore state after print dialog closes
+    document.title = originalTitle;
+    if (isMobileForm) {
+      document.body.classList.remove('mobile-view-preview');
+      document.body.classList.add('mobile-view-form');
+    }
+    
+    saveCurrentDocument('pdf_export');
+    showToast(`✓ Silakan pilih "Simpan sebagai PDF" / "Save as PDF"`, 'success', 4000);
+  }, 300);
 }
 
 /* ═══════════════════════════════════════════════
